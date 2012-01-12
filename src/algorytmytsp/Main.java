@@ -14,7 +14,7 @@ import java.util.LinkedList;
  *
  * @author student
  */
-public class AlgorytmyTSP {
+public class Main {
 
     /**
      * @param args the command line arguments
@@ -27,16 +27,16 @@ public class AlgorytmyTSP {
         IAlgorytmTSP algorytmy[] = {new AlgorytmBB()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 100;
+        int liczbaWierzcholkow = 10;
         boolean skierowanie = false;
         double pokrycie = 1.0; // Ta zmienna póki co nie ma wpływu na faktyczne pokrycie
 
         // Ustawienia zmian liczby wierzcholkow
         int stalyPrzyrost = 0;
-        double wspolczynnikPrzyrostu = 1.1;
+        double wspolczynnikPrzyrostu = 1.5;
 
         // Ustawienia przetwarzania
-        int liczbaIteracji = 1;
+        int liczbaIteracji = 10;
 
         // Generator grafu
         GeneratorGrafu generator = new GeneratorGrafu();
