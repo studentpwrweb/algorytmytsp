@@ -8,7 +8,6 @@ import algorytmytsp.algorytmy.AlgorytmBB;
 import algorytmytsp.algorytmy.IAlgorytmTSP;
 import algorytmytsp.grafy.GeneratorGrafu;
 import algorytmytsp.grafy.Graf;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
