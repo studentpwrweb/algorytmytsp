@@ -24,16 +24,16 @@ public class Main {
 
         // Algorytmy, które zostaną wykonane
         // Algorytm z którym będziemy porównywać rozwiązania (wyczerpujący) musi być pierwszy
-        IAlgorytmTSP algorytmy[] = {new AlgorytmBB()};
+        IAlgorytmTSP algorytmy[] = {new AlgorytmBB(), new AlgorytmBB()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 10;
+        int liczbaWierzcholkow = 100;
         boolean skierowanie = false;
         double pokrycie = 1.0; // Ta zmienna póki co nie ma wpływu na faktyczne pokrycie
 
         // Ustawienia zmian liczby wierzcholkow
         int stalyPrzyrost = 0;
-        double wspolczynnikPrzyrostu = 1.5;
+        double wspolczynnikPrzyrostu = 1.2;
 
         // Ustawienia przetwarzania
         int liczbaIteracji = 10;
@@ -56,7 +56,7 @@ public class Main {
             rozmiaryGrafow[i] = rozmiar;
             
             // Wypisywanie rozmiaru
-            //System.out.print(rozmiar + '\t');
+            System.out.print(rozmiar + "\t");
 
             Graf graf = generator.losowyGraf(rozmiar, skierowanie, pokrycie);
 
@@ -66,8 +66,10 @@ public class Main {
 
                 // Obliczenia dla i-tego algorytmu
                 long poczatek = System.nanoTime();
-                double waga = wagaSciezki(algorytmy[j].rozwiazTSP(graf), graf);
+                List<Integer> rozwiazanie = algorytmy[j].rozwiazTSP(graf);
                 long koniec = System.nanoTime();
+                
+                double waga = wagaSciezki(rozwiazanie, graf);
 
                 if (j == 0) {
                     wagaReferencyjna = waga;
@@ -78,8 +80,10 @@ public class Main {
                 jakosciRozwiazan[i][j] = waga / wagaReferencyjna;
                 
                 // Wypisywanie wyników
-                System.out.println(czasyObliczen[i][j]);
+                System.out.print(czasyObliczen[i][j] + "\t");
             }
+            
+            System.out.println();
         }
 
     }
