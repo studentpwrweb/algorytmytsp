@@ -33,7 +33,7 @@ public class Main {
 
         // Ustawienia zmian liczby wierzcholkow
         int stalyPrzyrost = 0;
-        double wspolczynnikPrzyrostu = 1.2;
+        double wspolczynnikPrzyrostu = 1.25;
 
         // Ustawienia przetwarzania
         int liczbaIteracji = 10;
@@ -56,7 +56,7 @@ public class Main {
             rozmiaryGrafow[i] = rozmiar;
             
             // Wypisywanie rozmiaru
-            System.out.print(rozmiar + "\t");
+            System.out.print(rozmiar);
 
             Graf graf = generator.losowyGraf(rozmiar, skierowanie, pokrycie);
 
@@ -80,7 +80,8 @@ public class Main {
                 jakosciRozwiazan[i][j] = waga / wagaReferencyjna;
                 
                 // Wypisywanie wyników
-                System.out.print(czasyObliczen[i][j] + "\t");
+                System.out.print('\t' + Long.toString(czasyObliczen[i][j]));
+                System.out.print('\t' + Double.toString(jakosciRozwiazan[i][j]));
             }
             
             System.out.println();
