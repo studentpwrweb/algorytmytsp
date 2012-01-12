@@ -5,12 +5,12 @@
 package algorytmytsp.algorytmy;
 
 import algorytmytsp.grafy.Graf;
-import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
  * @author Tomek
  */
 public interface IAlgorytmTSP {
-    public LinkedList<Integer> rozwiazTSP(Graf graf);
+    public List<Integer> rozwiazTSP(Graf graf);
 }

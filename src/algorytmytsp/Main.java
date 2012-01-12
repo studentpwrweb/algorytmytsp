@@ -9,6 +9,7 @@ import algorytmytsp.algorytmy.IAlgorytmTSP;
 import algorytmytsp.grafy.GeneratorGrafu;
 import algorytmytsp.grafy.Graf;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -84,13 +85,11 @@ public class Main {
 
     }
     
-    private static double wagaSciezki(LinkedList<Integer> sciezka, Graf graf) {
+    private static double wagaSciezki(List<Integer> sciezka, Graf graf) {
         double waga = 0;
-        /*
         for (int i = 0; i < sciezka.size() - 1; i++) {
             waga += graf.getWagaKrawedzi(sciezka.get(i), sciezka.get(i + 1));
         }
-        */
         
         return waga;
     }

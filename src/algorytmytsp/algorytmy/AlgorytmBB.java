@@ -20,7 +20,7 @@ public class AlgorytmBB implements IAlgorytmTSP {
     private double gorneOgr;
 
     @Override
-    public LinkedList<Integer> rozwiazTSP(Graf g) {
+    public List<Integer> rozwiazTSP(Graf g) {
         macierz = new MacierzPrzestawna(g);
         czescioweRozw = new HashSet<LinkedList<Integer>>();
         gorneOgr = Double.POSITIVE_INFINITY;
