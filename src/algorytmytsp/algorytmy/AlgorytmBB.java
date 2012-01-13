@@ -100,16 +100,16 @@ public class AlgorytmBB implements IAlgorytmTSP {
     
     private LinkedList<Integer> dodajDoRozw(int i, int j) {
         
-        LinkedList<Integer> krawedz = new LinkedList<Integer>();
-        krawedz.add(i);
-        krawedz.add(j);
+        LinkedList<Integer> nowaSciezka = new LinkedList<Integer>();
+        nowaSciezka.add(i);
+        nowaSciezka.add(j);
 
         for (Iterator<LinkedList<Integer>> it = czescioweRozw.iterator(); it.hasNext();) {
             LinkedList<Integer> sciezka = it.next();
 
-            if (sciezka.getLast() == krawedz.getFirst()) {
-                krawedz.removeFirst();
-                krawedz.addAll(0, sciezka);
+            if (sciezka.getLast() == nowaSciezka.getFirst()) {
+                nowaSciezka.removeFirst();
+                nowaSciezka.addAll(0, sciezka);
                 it.remove();
                 break;
             }
@@ -118,17 +118,17 @@ public class AlgorytmBB implements IAlgorytmTSP {
         for (Iterator<LinkedList<Integer>> it = czescioweRozw.iterator(); it.hasNext();) {
             LinkedList<Integer> sciezka = it.next();
 
-            if (sciezka.getFirst() == krawedz.getLast()) {
-                krawedz.removeLast();
-                krawedz.addAll(sciezka);
+            if (sciezka.getFirst() == nowaSciezka.getLast()) {
+                nowaSciezka.removeLast();
+                nowaSciezka.addAll(sciezka);
                 it.remove();
                 break;
             }
         }
 
-        czescioweRozw.add(krawedz);
+        czescioweRozw.add(nowaSciezka);
         
-        return krawedz;
+        return nowaSciezka;
     }
 
     private void redukujMacierz(WezelRozw wezel) {
