@@ -4,7 +4,7 @@
  */
 package algorytmytsp.prezentacja;
 
-import algorytmytsp.prezentacja.KolorElementu;
+import algorytmytsp.prezentacja.KoloryElementow;
 import java.util.EnumMap;
 import java.awt.Color;
 import java.awt.Font;
@@ -13,8 +13,8 @@ import java.awt.Font;
  *
  * @author Tomek
  */
-public class StylPrezentacji {
-    private EnumMap<KolorElementu, Color> mapaKolorow = new EnumMap<KolorElementu, Color>(KolorElementu.class);
+public class SchematKolorow {
+    private EnumMap<KoloryElementow, Color> mapaKolorow = new EnumMap<KoloryElementow, Color>(KoloryElementow.class);
     
     private Color kolorTla = Color.WHITE;
     private double rozmiarWierzcholka  = 32;
@@ -22,23 +22,23 @@ public class StylPrezentacji {
     private Font czcionka = new Font("Dialog", Font.PLAIN, 16);
     private int maksDlugoscWag = 4;
     
-    public StylPrezentacji() {
+    public SchematKolorow() {
         /*for (KolorElementu kolorElementu : KolorElementu.values()) {
             mapaKolorow.put(kolorElementu, Color.BLACK);
         }*/ 
-        mapaKolorow.put(KolorElementu.DOMYSLNY, Color.BLACK);
-        mapaKolorow.put(KolorElementu.WYROZNIONY, Color.RED);
-        mapaKolorow.put(KolorElementu.NIEODWIEDZONY, Color.BLACK);
-        mapaKolorow.put(KolorElementu.ODWIEDZONY, Color.GRAY);
-        mapaKolorow.put(KolorElementu.ANALIZOWANY, Color.GREEN);
-        mapaKolorow.put(KolorElementu.NIEWIDOCZNY, new Color(0, true));
+        mapaKolorow.put(KoloryElementow.DOMYSLNY, Color.BLACK);
+        mapaKolorow.put(KoloryElementow.WYROZNIONY, Color.RED);
+        mapaKolorow.put(KoloryElementow.NIEODWIEDZONY, Color.BLACK);
+        mapaKolorow.put(KoloryElementow.ODWIEDZONY, Color.GRAY);
+        mapaKolorow.put(KoloryElementow.ANALIZOWANY, Color.GREEN);
+        mapaKolorow.put(KoloryElementow.NIEWIDOCZNY, new Color(0, true));
     }
     
-    public void mapujKolor(KolorElementu kolorElementu, Color kolorRGB) {
+    public void mapujKolor(KoloryElementow kolorElementu, Color kolorRGB) {
         mapaKolorow.put(kolorElementu, kolorRGB);
     }
     
-    public Color getKolorRGB(KolorElementu kolorElementu) {
+    public Color getKolorRGB(KoloryElementow kolorElementu) {
         return mapaKolorow.get(kolorElementu);
     }
     

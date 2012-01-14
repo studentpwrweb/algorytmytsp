@@ -4,36 +4,36 @@
  */
 package algorytmytsp.prezentacja;
 
-import algorytmytsp.grafy.Graf;
+import algorytmytsp.grafy.GrafXY;
 import java.util.List;
 
 /**
  *
  * @author Tomek
  */
-public class PrezentacjaGrafu {
+public class MapaKolorow {
 
-    private KolorElementu koloryWierzcholkow[];
-    private KolorElementu koloryKrawedzi[][];
-    private Graf graf;
+    private KoloryElementow koloryWierzcholkow[];
+    private KoloryElementow koloryKrawedzi[][];
+    private GrafXY graf;
 
-    public PrezentacjaGrafu(Graf graf) {
+    public MapaKolorow(GrafXY graf) {
         this.graf = graf;
 
         if (this.graf != null) {
             int n = graf.getLiczbaWierzcholkow();
-            koloryWierzcholkow = new KolorElementu[n];
-            koloryKrawedzi = new KolorElementu[n][n];
+            koloryWierzcholkow = new KoloryElementow[n];
+            koloryKrawedzi = new KoloryElementow[n][n];
 
-            kolorujGraf(KolorElementu.DOMYSLNY);
+            wyczyscKolory();
         }
     }
     
-    final public void usunKolory() {
-        
+    final public void wyczyscKolory() {
+        kolorujGraf(KoloryElementow.DOMYSLNY);
     }
 
-    final public void kolorujGraf(KolorElementu kolor) {
+    final public void kolorujGraf(KoloryElementow kolor) {
         for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
             kolorujWierzcholek(i, kolor);
         }
@@ -47,7 +47,7 @@ public class PrezentacjaGrafu {
         }
     }
 
-    public void kolorujKrawedz(int wierzcholek1, int wierzcholek2, KolorElementu kolor, boolean kolorujWierzcholki) {
+    public void kolorujKrawedz(int wierzcholek1, int wierzcholek2, KoloryElementow kolor, boolean kolorujWierzcholki) {
         koloryKrawedzi[wierzcholek1][wierzcholek2] = kolor;
 
         if (!graf.czyJestSkierowany()) {
@@ -60,11 +60,11 @@ public class PrezentacjaGrafu {
         }
     }
 
-    public void kolorujKrawedz(int wierzcholek1, int wierzcholek2, KolorElementu kolor) {
+    public void kolorujKrawedz(int wierzcholek1, int wierzcholek2, KoloryElementow kolor) {
         kolorujKrawedz(wierzcholek1, wierzcholek2, kolor, false);
     }
 
-    public void kolorujWierzcholek(int wierzcholek, KolorElementu kolor, boolean kolorujKrawedzie) {
+    public void kolorujWierzcholek(int wierzcholek, KoloryElementow kolor, boolean kolorujKrawedzie) {
         koloryWierzcholkow[wierzcholek] = kolor;
 
         if (kolorujKrawedzie) {
@@ -74,22 +74,26 @@ public class PrezentacjaGrafu {
         }
     }
 
-    public void kolorujWierzcholek(int wierzcholek, KolorElementu kolor) {
+    public void kolorujWierzcholek(int wierzcholek, KoloryElementow kolor) {
         kolorujWierzcholek(wierzcholek, kolor, false);
     }
 
-    public void kolorujSciezke(List<Integer> sciezka, KolorElementu kolor) {
+    public void kolorujSciezke(List<Integer> sciezka, KoloryElementow kolor) {
         for (int i = 0; i < sciezka.size() - 1; i++) {
             kolorujKrawedz(sciezka.get(i), sciezka.get(i + 1), kolor, true);
         }
         kolorujWierzcholek(sciezka.get(sciezka.size() - 1), kolor, false);
     }
 
-    public KolorElementu getKolorWierzcholka(int wierzcholek) {
+    public KoloryElementow getKolorWierzcholka(int wierzcholek) {
         return koloryWierzcholkow[wierzcholek];
     }
 
-    public KolorElementu getKolorKrawedzi(int wierzcholek1, int wierzcholek2) {
+    public KoloryElementow getKolorKrawedzi(int wierzcholek1, int wierzcholek2) {
         return koloryKrawedzi[wierzcholek1][wierzcholek2];
+    }
+ 
+    public GrafXY getGraf() {
+        return graf;
     }
 }

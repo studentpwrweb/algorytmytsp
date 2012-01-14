@@ -11,37 +11,30 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
-import javax.swing.JApplet;
+import javax.swing.JPanel;
 
 /**
  *
  * @author Tomek
  */
-public class AppletRysujacy extends JApplet {
+public class PanelRysujacy extends JPanel {
 
     private GrafXY graf;
-    private StylPrezentacji styl;
-    private PrezentacjaGrafu prezentacja;
-    
-    public AppletRysujacy() {
+    private SchematKolorow schematKolorow;
+    private MapaKolorow mapaKolorow;
+
+    public PanelRysujacy() {
         super();
-        
+
         addMouseListener(new MouseHandler());
     }
 
     @Override
-    public void paint(Graphics g) {
-        
-        if (graf == null) {
-            return;
-        }
+    public void paintComponent(Graphics g) {
+        super.paintComponent(g);
 
-        if (prezentacja == null) {
-            prezentacja = new PrezentacjaGrafu(graf);
-        }
-
-        if (styl == null) {
-            styl = new StylPrezentacji();
+        if (schematKolorow == null) {
+            schematKolorow = new SchematKolorow();
         }
 
         Graphics2D g2 = (Graphics2D) g;
@@ -49,11 +42,19 @@ public class AppletRysujacy extends JApplet {
         int wysokosc = getSize().height;
         int szerokosc = getSize().width;
 
-        g2.setBackground(styl.getKolorRGBTla());
+        g2.setBackground(schematKolorow.getKolorRGBTla());
         g2.clearRect(0, 0, szerokosc, wysokosc);
-        g2.setStroke(new BasicStroke((float) styl.getGruboscLinii()));
-        g2.setFont(styl.getCzcionka());
+        g2.setStroke(new BasicStroke((float) schematKolorow.getGruboscLinii()));
+        g2.setFont(schematKolorow.getCzcionka());
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+        if (graf == null) {
+            return;
+        }
+
+        if (mapaKolorow == null) {
+            mapaKolorow = new MapaKolorow(graf);
+        }
 
         // Obliczanie punktow w których maja zostac wyswietlone wierzcholki
         Point2D.Double punkty[] = new Point2D.Double[graf.getLiczbaWierzcholkow()];
@@ -73,13 +74,13 @@ public class AppletRysujacy extends JApplet {
                 }
             }
         }
-        
+
         // Rysowanie wag krawedzi 
         for (int i = 0; i < graf.getLiczbaWierzcholkow() - 1; i++) {
             for (int j = i; j < graf.getLiczbaWierzcholkow(); j++) {
                 if (graf.czyIstniejeKrawedz(i, j)) {
                     String str = Double.toString(graf.getWagaKrawedzi(i, j));
-                    str = str.substring(0, Math.min(str.length(), styl.getMaksDlugoscWag()));
+                    str = str.substring(0, Math.min(str.length(), schematKolorow.getMaksDlugoscWag()));
 
                     double strSzer = g2.getFontMetrics().stringWidth(str);
                     double strWys = g2.getFontMetrics().getAscent() - g2.getFontMetrics().getDescent();
@@ -120,11 +121,11 @@ public class AppletRysujacy extends JApplet {
 
         // Rysowanie wierzcholkow
         for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
-            double rw = styl.getRozmiarWierzcholka();
+            double rw = schematKolorow.getRozmiarWierzcholka();
             Shape okrag = new Ellipse2D.Double(punkty[i].x - rw * 0.5,
                     punkty[i].y - rw * 0.5,
                     rw, rw);
-            g2.setPaint(styl.getKolorRGBTla());
+            g2.setPaint(schematKolorow.getKolorRGBTla());
             g2.fill(okrag);
 
             g2.setPaint(kolorRGBWierzcholka(i));
@@ -136,30 +137,44 @@ public class AppletRysujacy extends JApplet {
             g2.drawString(Integer.toString(i),
                     (float) (punkty[i].x - strSzer * 0.5),
                     (float) (punkty[i].y + strWys * 0.5));
-        }  
-        
+        }
+
     }
 
     private Color kolorRGBWierzcholka(int w) {
-        return styl.getKolorRGB(prezentacja.getKolorWierzcholka(w));
+        return schematKolorow.getKolorRGB(mapaKolorow.getKolorWierzcholka(w));
     }
 
     private Color kolorRGBKrawedzi(int w1, int w2) {
-        return styl.getKolorRGB(prezentacja.getKolorKrawedzi(w1, w2));
+        return schematKolorow.getKolorRGB(mapaKolorow.getKolorKrawedzi(w1, w2));
     }
 
     private Point2D.Double polozenieWierzcholka(int w) {
         Point2D.Double punkt = new Point2D.Double();
 
-        punkt.x = graf.getWspolrzednaXWierzcholka(w) * getSize().width;
-        punkt.y = graf.getWspolrzednaYWierzcholka(w) * getSize().height;
+
+        punkt.x = graf.getWspolrzednaXWierzcholka(w)
+                * (getSize().getWidth() - schematKolorow.getRozmiarWierzcholka())
+                + 0.5 * schematKolorow.getRozmiarWierzcholka();
+        punkt.y = graf.getWspolrzednaYWierzcholka(w)
+                * (getSize().getHeight() - schematKolorow.getRozmiarWierzcholka())
+                + 0.5 * schematKolorow.getRozmiarWierzcholka();
 
         return punkt;
     }
+    
+    public MapaKolorow getMapaKolorow() {
+        return mapaKolorow;
+    }
 
-    @Override
-    public void init() {
+    public void setSchematKolorow(SchematKolorow schematKolorow) {
+        this.schematKolorow = schematKolorow;
         
+        this.repaint();
+    }
+
+    public SchematKolorow getSchematKolorow() {
+        return schematKolorow;
     }
 
     public GrafXY getGraf() {
@@ -168,23 +183,16 @@ public class AppletRysujacy extends JApplet {
 
     public void setGraf(GrafXY graf) {
         this.graf = graf;
-    }
+        this.mapaKolorow = new MapaKolorow(graf);
 
-    public void setPrezentacja(PrezentacjaGrafu prezentacja) {
-        this.prezentacja = prezentacja;
-    }
-
-    public void setStyl(StylPrezentacji styl) {
-        this.styl = styl;
+        this.repaint();
     }
     
     private class MouseHandler extends MouseAdapter {
+
         @Override
         public void mouseClicked(MouseEvent e) {
             System.out.println("Klik!");
-            
-            
         }
     }
-    // TODO overwrite start(), stop() and destroy() methods
 }

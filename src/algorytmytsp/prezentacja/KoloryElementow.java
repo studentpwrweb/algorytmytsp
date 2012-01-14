@@ -8,6 +8,6 @@ package algorytmytsp.prezentacja;
  *
  * @author Tomek
  */
-public enum KolorElementu {
+public enum KoloryElementow {
     DOMYSLNY, WYROZNIONY, NIEODWIEDZONY, ODWIEDZONY, ANALIZOWANY, NIEWIDOCZNY
 }
