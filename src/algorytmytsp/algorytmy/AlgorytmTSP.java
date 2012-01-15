@@ -8,19 +8,21 @@ import algorytmytsp.grafy.Graf;
 import algorytmytsp.grafy.GrafXY;
 import algorytmytsp.prezentacja.MapaKolorow;
 import algorytmytsp.prezentacja.WatekAlgorytmu;
+import java.util.List;
 
 /**
  *
  * @author Tomek
  */
-public abstract class AlgorytmTSP {
+public abstract class AlgorytmTSP implements IAlgorytmTSP {
     protected WatekAlgorytmu watek;
     protected MapaKolorow mapaKolorow;
     protected boolean iteracyjnie = false;
     
-    public abstract void rozwiazTSP(Graf graf);
+    @Override
+    public abstract List<Integer> rozwiazTSP(Graf graf);
     
-    public abstract void rozwiazTSPIteracyjnie(Graf graf);
+    public abstract List<Integer> rozwiazTSPIteracyjnie(Graf graf);
     
     protected void zakonczIteracje() {
         if (iteracyjnie && watek != null) {

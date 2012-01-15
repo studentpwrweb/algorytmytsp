@@ -9,6 +9,11 @@ import algorytmytsp.grafy.GrafXY;
 import algorytmytsp.prezentacja.KoloryElementow;
 import algorytmytsp.prezentacja.MapaKolorow;
 import algorytmytsp.prezentacja.WatekAlgorytmu;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
  *
@@ -19,31 +24,32 @@ public class PrzykladowyTSP extends AlgorytmTSP {
     private int nrIteracji = 0;
 
     @Override
-    public void rozwiazTSP(Graf graf) {
+    public List<Integer> rozwiazTSP(Graf graf) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 
     @Override
-    public void rozwiazTSPIteracyjnie(Graf graf) {
+    public List<Integer> rozwiazTSPIteracyjnie(Graf graf) {
         
         nrIteracji = 0;
+        
+        LinkedList<Integer> sciezka = new LinkedList<Integer>();
         
         while (nrIteracji < graf.getLiczbaWierzcholkow()) {
             
             // Koloruje wierzcholek i wszystkie incydentne krawedzie
             mapaKolorow.kolorujWierzcholek(nrIteracji, KoloryElementow.ODWIEDZONY, true);
             
-            // Koloruje tylko wierzcholek
-            mapaKolorow.kolorujWierzcholek(nrIteracji, KoloryElementow.ANALIZOWANY);
+            sciezka.add(nrIteracji);
             
-            if (nrIteracji > 0) {
-                // Koloruje tylko wierzcholek
-                mapaKolorow.kolorujWierzcholek(nrIteracji - 1, KoloryElementow.ODWIEDZONY);
-            }
+            // Koloruje sciezke (wierzcholki i krawedzie)
+            mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY);
             
             nrIteracji++;
   
             zakonczIteracje();
         }
+        
+        return sciezka;
     }
 }
