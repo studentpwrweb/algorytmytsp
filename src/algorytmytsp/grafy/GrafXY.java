@@ -14,7 +14,6 @@ public class GrafXY extends Graf {
     private double wspolrzedneY[];
 
     public GrafXY(int liczbaWierzcholkow) {
-
         super(liczbaWierzcholkow, false);
 
         wspolrzedneX = new double[liczbaWierzcholkow];
@@ -28,7 +27,32 @@ public class GrafXY extends Graf {
         wspolrzedneY = grafWzorcowy.wspolrzedneY.clone();
     }
 
-    public void setWspolrzedneWierzcholka(int wierzcholek, double wspolrzednaX, double wspolrzednaY, boolean aktualizujWagi) {
+    public GrafXY(GrafXY grafWzorcowy, double wspolrzednaX, double wspolrzednaY) {
+        super(0);
+
+        liczbaWierzcholkow = grafWzorcowy.getLiczbaWierzcholkow() + 1;
+        skierowany = grafWzorcowy.czyJestSkierowany();
+
+        macierzKosztow = new double[liczbaWierzcholkow][liczbaWierzcholkow];
+        wspolrzedneX = new double[liczbaWierzcholkow];
+        wspolrzedneY = new double[liczbaWierzcholkow];
+
+        for (int i = 0; i < grafWzorcowy.getLiczbaWierzcholkow(); i++) {
+            for (int j = 0; j < grafWzorcowy.getLiczbaWierzcholkow(); j++) {
+                macierzKosztow[i][j] = grafWzorcowy.getWagaKrawedzi(i, j);
+            }
+        }
+
+        for (int i = 0; i < grafWzorcowy.getLiczbaWierzcholkow(); i++) {
+            setWspolrzedneWierzcholka(i,
+                    grafWzorcowy.getXWierzcholka(i),
+                    grafWzorcowy.getYWierzcholka(i), false);
+        }
+
+        setWspolrzedneWierzcholka(liczbaWierzcholkow - 1, wspolrzednaX, wspolrzednaY, true);
+    }
+
+    public final void setWspolrzedneWierzcholka(int wierzcholek, double wspolrzednaX, double wspolrzednaY, boolean aktualizujWagi) {
 
         wspolrzedneX[wierzcholek] = wspolrzednaX;
         wspolrzedneY[wierzcholek] = wspolrzednaY;
@@ -41,15 +65,15 @@ public class GrafXY extends Graf {
         }
     }
 
-    public void setWspolrzedneWierzcholka(int wierzcholek, double x, double y) {
+    public void setXYWierzcholka(int wierzcholek, double x, double y) {
         setWspolrzedneWierzcholka(wierzcholek, x, y, true);
     }
-    
-    public double getWspolrzednaXWierzcholka(int wierzcholek) {
+
+    public double getXWierzcholka(int wierzcholek) {
         return wspolrzedneX[wierzcholek];
     }
-    
-    public double getWspolrzednaYWierzcholka(int wierzcholek) {
+
+    public double getYWierzcholka(int wierzcholek) {
         return wspolrzedneY[wierzcholek];
     }
 

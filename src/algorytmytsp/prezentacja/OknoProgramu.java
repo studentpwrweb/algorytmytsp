@@ -29,7 +29,6 @@ public class OknoProgramu extends javax.swing.JFrame {
         algorytmy.put("Drugi TSP", new PrzykladowyTSP());
         algorytmy.put("Trzeci TSP", new PrzykladowyTSP());
         
-        //jComboBox1.setSelectedIndex(1);
         initComponents();
     }
 
@@ -60,6 +59,12 @@ public class OknoProgramu extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
+
+        panelRysujacy1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                panelRysujacy1MouseClicked(evt);
+            }
+        });
 
         javax.swing.GroupLayout panelRysujacy1Layout = new javax.swing.GroupLayout(panelRysujacy1);
         panelRysujacy1.setLayout(panelRysujacy1Layout);
@@ -147,6 +152,11 @@ public class OknoProgramu extends javax.swing.JFrame {
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1000), Integer.valueOf(0), null, Integer.valueOf(1)));
         jSpinner2.setMinimumSize(new java.awt.Dimension(60, 20));
         jSpinner2.setPreferredSize(new java.awt.Dimension(60, 20));
+        jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                jSpinner2StateChanged(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -269,6 +279,20 @@ public class OknoProgramu extends javax.swing.JFrame {
         // TODO add your handling code here:
         panelRysujacy1.setGraf(null);
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void panelRysujacy1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRysujacy1MouseClicked
+        // TODO add your handling code here:
+        if (panelRysujacy1.isEnabled()) {
+            panelRysujacy1.dodajWierzcholek(evt.getX(), evt.getY());
+        }
+    }//GEN-LAST:event_panelRysujacy1MouseClicked
+
+    private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
+        // TODO add your handling code here:
+        if (watekAlgorytmu != null && watekAlgorytmu.isAlive()) {
+            watekAlgorytmu.setOpoznienie((Integer)jSpinner2.getValue());
+        }
+    }//GEN-LAST:event_jSpinner2StateChanged
 
     /**
      * @param args the command line arguments

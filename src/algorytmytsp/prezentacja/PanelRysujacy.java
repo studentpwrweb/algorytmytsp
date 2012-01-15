@@ -20,21 +20,23 @@ import javax.swing.JPanel;
 public class PanelRysujacy extends JPanel {
 
     private GrafXY graf;
-    private SchematKolorow schematKolorow;
-    private MapaKolorow mapaKolorow;
+    private SchematKolorow schemat;
+    private MapaKolorow mapa;
 
     public PanelRysujacy() {
         super();
-
-        addMouseListener(new MouseHandler());
+        
+        graf = new GrafXY(0);
+        mapa = new MapaKolorow(graf);
+        schemat = new SchematKolorow();
     }
 
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        if (schematKolorow == null) {
-            schematKolorow = new SchematKolorow();
+        if (schemat == null) {
+            schemat = new SchematKolorow();
         }
 
         Graphics2D g2 = (Graphics2D) g;
@@ -42,25 +44,26 @@ public class PanelRysujacy extends JPanel {
         int wysokosc = getSize().height;
         int szerokosc = getSize().width;
 
-        g2.setBackground(schematKolorow.getKolorRGBTla());
+        g2.setBackground(schemat.getKolorRGBTla());
         g2.clearRect(0, 0, szerokosc, wysokosc);
-        g2.setStroke(new BasicStroke((float) schematKolorow.getGruboscLinii()));
-        g2.setFont(schematKolorow.getCzcionka());
+        g2.setStroke(new BasicStroke((float) schemat.getGruboscLinii()));
+        g2.setFont(schemat.getCzcionka());
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         if (graf == null) {
             return;
         }
 
-        if (mapaKolorow == null) {
-            mapaKolorow = new MapaKolorow(graf);
+        if (mapa == null) {
+            mapa = new MapaKolorow(graf);
         }
 
         // Obliczanie punktow w których maja zostac wyswietlone wierzcholki
         Point2D.Double punkty[] = new Point2D.Double[graf.getLiczbaWierzcholkow()];
 
         for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
-            punkty[i] = polozenieWierzcholka(i);
+            punkty[i] = wierzcholekNaPanel(
+                    new Point2D.Double(graf.getXWierzcholka(i), graf.getYWierzcholka(i)));
         }
 
         // Rysowanie krawedzi 
@@ -80,7 +83,7 @@ public class PanelRysujacy extends JPanel {
             for (int j = i; j < graf.getLiczbaWierzcholkow(); j++) {
                 if (graf.czyIstniejeKrawedz(i, j)) {
                     String str = Double.toString(graf.getWagaKrawedzi(i, j));
-                    str = str.substring(0, Math.min(str.length(), schematKolorow.getMaksDlugoscWag()));
+                    str = str.substring(0, Math.min(str.length(), schemat.getMaksDlugoscWag()));
 
                     double strSzer = g2.getFontMetrics().stringWidth(str);
                     double strWys = g2.getFontMetrics().getAscent() - g2.getFontMetrics().getDescent();
@@ -121,11 +124,11 @@ public class PanelRysujacy extends JPanel {
 
         // Rysowanie wierzcholkow
         for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
-            double rw = schematKolorow.getRozmiarWierzcholka();
+            double rw = schemat.getRozmiarWierzcholka();
             Shape okrag = new Ellipse2D.Double(punkty[i].x - rw * 0.5,
                     punkty[i].y - rw * 0.5,
                     rw, rw);
-            g2.setPaint(schematKolorow.getKolorRGBTla());
+            g2.setPaint(schemat.getKolorRGBTla());
             g2.fill(okrag);
 
             g2.setPaint(kolorRGBWierzcholka(i));
@@ -142,57 +145,70 @@ public class PanelRysujacy extends JPanel {
     }
 
     private Color kolorRGBWierzcholka(int w) {
-        return schematKolorow.getKolorRGB(mapaKolorow.getKolorWierzcholka(w));
+        return schemat.getKolorRGB(mapa.getKolorWierzcholka(w));
     }
 
     private Color kolorRGBKrawedzi(int w1, int w2) {
-        return schematKolorow.getKolorRGB(mapaKolorow.getKolorKrawedzi(w1, w2));
+        return schemat.getKolorRGB(mapa.getKolorKrawedzi(w1, w2));
     }
 
-    private Point2D.Double polozenieWierzcholka(int w) {
-        Point2D.Double punkt = new Point2D.Double();
+    private Point2D.Double wierzcholekNaPanel(Point2D.Double w) {
+        Point2D.Double p = new Point2D.Double();
 
+        double rw = getSchematKolorow().getRozmiarWierzcholka();
 
-        punkt.x = graf.getWspolrzednaXWierzcholka(w)
-                * (getSize().getWidth() - schematKolorow.getRozmiarWierzcholka())
-                + 0.5 * schematKolorow.getRozmiarWierzcholka();
-        punkt.y = graf.getWspolrzednaYWierzcholka(w)
-                * (getSize().getHeight() - schematKolorow.getRozmiarWierzcholka())
-                + 0.5 * schematKolorow.getRozmiarWierzcholka();
+        p.x = w.getX() * (getWidth() - rw) + 0.5 * rw;
+        p.y = w.getY() * (getHeight() - rw) + 0.5 * rw;
 
-        return punkt;
+        return p;
+    }
+
+    private Point2D.Double panelNaWierzcholek(Point2D.Double p) {
+        Point2D.Double w = new Point2D.Double();
+
+        double rw = getSchematKolorow().getRozmiarWierzcholka();
+
+        w.x = (p.getX() - 0.5 * rw) / (getWidth() - rw);
+        w.y = (p.getY() - 0.5 * rw) / (getHeight() - rw);
+
+        w.x = Math.max(Math.min(w.getX(), 1), 0);
+        w.y = Math.max(Math.min(w.getY(), 1), 0);
+
+        return w;
     }
     
-    public MapaKolorow getMapaKolorow() {
-        return mapaKolorow;
-    }
+    public void dodajWierzcholek(double x, double y) {
+        Point2D.Double xy = panelNaWierzcholek(new Point2D.Double(x, y));
 
-    public void setSchematKolorow(SchematKolorow schematKolorow) {
-        this.schematKolorow = schematKolorow;
+        setGraf(new GrafXY(getGraf(), xy.getX(), xy.getY()));
+    }
         
-        this.repaint();
-    }
-
-    public SchematKolorow getSchematKolorow() {
-        return schematKolorow;
-    }
-
     public GrafXY getGraf() {
         return graf;
     }
 
     public void setGraf(GrafXY graf) {
-        this.graf = graf;
-        this.mapaKolorow = new MapaKolorow(graf);
+        this.graf = (graf != null ? graf : new GrafXY(0));
+        this.mapa = new MapaKolorow(this.graf);
 
         this.repaint();
     }
     
-    private class MouseHandler extends MouseAdapter {
+    public void setMapaKolorow(MapaKolorow mapa) {
+        this.mapa = mapa;
+    }
 
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            System.out.println("Klik!");
-        }
+    public MapaKolorow getMapaKolorow() {
+        return mapa;
+    }
+
+    public void setSchematKolorow(SchematKolorow schemat) {
+        this.schemat = schemat;
+
+        this.repaint();
+    }
+
+    public SchematKolorow getSchematKolorow() {
+        return schemat;
     }
 }
