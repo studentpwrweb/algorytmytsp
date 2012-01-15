@@ -4,7 +4,7 @@
  */
 package algorytmytsp.prezentacja;
 
-import algorytmytsp.algorytmy.AlgorytmTSP;
+import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
 import algorytmytsp.grafy.GrafXY;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,17 +16,17 @@ import java.util.logging.Logger;
 public class WatekAlgorytmu extends Thread {
 
     private PanelRysujacy panelRysujacy;
-    private AlgorytmTSP algorytm;
+    private AlgorytmIteracyjnyTSP algorytm;
     private long opoznienie;
     
-    public WatekAlgorytmu(PanelRysujacy panelRysujacy, AlgorytmTSP algorytm, long opoznienie) {
+    public WatekAlgorytmu(PanelRysujacy panelRysujacy, AlgorytmIteracyjnyTSP algorytm, long opoznienie) {
         this.panelRysujacy = panelRysujacy;
         this.algorytm = algorytm;
         this.opoznienie = opoznienie;
         this.setDaemon(true);
     }
     
-    public WatekAlgorytmu(PanelRysujacy panelRysujacy, AlgorytmTSP algorytm) {
+    public WatekAlgorytmu(PanelRysujacy panelRysujacy, AlgorytmIteracyjnyTSP algorytm) {
         this(panelRysujacy, algorytm, 1000);
     }
     

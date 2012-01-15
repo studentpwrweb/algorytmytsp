@@ -19,7 +19,7 @@ import java.util.ListIterator;
  *
  * @author Tomek
  */
-public class PrzykladowyTSP extends AlgorytmTSP {
+public class PrzykladowyIteracyjnyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     private int nrIteracji = 0;
 

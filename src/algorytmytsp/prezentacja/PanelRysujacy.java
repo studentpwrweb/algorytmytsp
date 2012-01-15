@@ -6,8 +6,6 @@ package algorytmytsp.prezentacja;
 
 import algorytmytsp.grafy.GrafXY;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
@@ -177,7 +175,7 @@ public class PanelRysujacy extends JPanel {
         return w;
     }
     
-    public void dodajWierzcholek(double x, double y) {
+    public void dodajWierzcholek(double x, double y) { 
         Point2D.Double xy = panelNaWierzcholek(new Point2D.Double(x, y));
 
         setGraf(new GrafXY(getGraf(), xy.getX(), xy.getY()));

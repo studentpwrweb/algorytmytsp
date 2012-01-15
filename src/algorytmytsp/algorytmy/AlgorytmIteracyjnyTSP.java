@@ -14,13 +14,10 @@ import java.util.List;
  *
  * @author Tomek
  */
-public abstract class AlgorytmTSP implements IAlgorytmTSP {
+public abstract class AlgorytmIteracyjnyTSP {
     protected WatekAlgorytmu watek;
     protected MapaKolorow mapaKolorow;
     protected boolean iteracyjnie = false;
-    
-    @Override
-    public abstract List<Integer> rozwiazTSP(Graf graf);
     
     public abstract List<Integer> rozwiazTSPIteracyjnie(Graf graf);
     

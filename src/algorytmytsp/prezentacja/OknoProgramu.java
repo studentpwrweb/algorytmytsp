@@ -4,9 +4,10 @@
  */
 package algorytmytsp.prezentacja;
 
-import algorytmytsp.algorytmy.AlgorytmTSP;
-import algorytmytsp.algorytmy.PrzykladowyTSP;
+import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
+import algorytmytsp.algorytmy.PrzykladowyIteracyjnyTSP;
 import algorytmytsp.grafy.GeneratorGrafu;
+import java.awt.Cursor;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
@@ -21,13 +22,13 @@ public class OknoProgramu extends javax.swing.JFrame {
      * Creates new form OknoPrezentacji
      */
     private GeneratorGrafu generator = new GeneratorGrafu();
-    private LinkedHashMap<String, AlgorytmTSP> algorytmy = new LinkedHashMap<String, AlgorytmTSP>();
+    private LinkedHashMap<String, AlgorytmIteracyjnyTSP> algorytmy = new LinkedHashMap<String, AlgorytmIteracyjnyTSP>();
     private WatekAlgorytmu watekAlgorytmu;
     
     public OknoProgramu() {
-        algorytmy.put("Pierwszy TSP", new PrzykladowyTSP());
-        algorytmy.put("Drugi TSP", new PrzykladowyTSP());
-        algorytmy.put("Trzeci TSP", new PrzykladowyTSP());
+        algorytmy.put("Pierwszy TSP", new PrzykladowyIteracyjnyTSP());
+        algorytmy.put("Drugi TSP", new PrzykladowyIteracyjnyTSP());
+        algorytmy.put("Trzeci TSP", new PrzykladowyIteracyjnyTSP());
         
         initComponents();
     }
@@ -61,8 +62,8 @@ public class OknoProgramu extends javax.swing.JFrame {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         panelRysujacy1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                panelRysujacy1MouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                panelRysujacy1MouseReleased(evt);
             }
         });
 
@@ -280,19 +281,20 @@ public class OknoProgramu extends javax.swing.JFrame {
         panelRysujacy1.setGraf(null);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    private void panelRysujacy1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRysujacy1MouseClicked
-        // TODO add your handling code here:
-        if (panelRysujacy1.isEnabled()) {
-            panelRysujacy1.dodajWierzcholek(evt.getX(), evt.getY());
-        }
-    }//GEN-LAST:event_panelRysujacy1MouseClicked
-
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         // TODO add your handling code here:
         if (watekAlgorytmu != null && watekAlgorytmu.isAlive()) {
             watekAlgorytmu.setOpoznienie((Integer)jSpinner2.getValue());
         }
     }//GEN-LAST:event_jSpinner2StateChanged
+
+    private void panelRysujacy1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelRysujacy1MouseReleased
+        // TODO add your handling code here:
+        if (panelRysujacy1.isEnabled()) {
+            panelRysujacy1.dodajWierzcholek(evt.getX(), evt.getY());
+            System.out.println("Klik " + panelRysujacy1.getGraf().getLiczbaWierzcholkow());
+        }
+    }//GEN-LAST:event_panelRysujacy1MouseReleased
 
     /**
      * @param args the command line arguments

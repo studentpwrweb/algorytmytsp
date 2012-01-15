@@ -24,7 +24,7 @@
   <SubComponents>
     <Container class="algorytmytsp.prezentacja.PanelRysujacy" name="panelRysujacy1">
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="panelRysujacy1MouseClicked"/>
+        <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="panelRysujacy1MouseReleased"/>
       </Events>
 
       <Layout>
