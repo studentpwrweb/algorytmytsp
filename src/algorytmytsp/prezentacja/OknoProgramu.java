@@ -7,7 +7,6 @@ package algorytmytsp.prezentacja;
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
 import algorytmytsp.algorytmy.PrzykladowyIteracyjnyTSP;
 import algorytmytsp.grafy.GeneratorGrafu;
-import java.awt.Cursor;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
@@ -292,7 +291,6 @@ public class OknoProgramu extends javax.swing.JFrame {
         // TODO add your handling code here:
         if (panelRysujacy1.isEnabled()) {
             panelRysujacy1.dodajWierzcholek(evt.getX(), evt.getY());
-            System.out.println("Klik " + panelRysujacy1.getGraf().getLiczbaWierzcholkow());
         }
     }//GEN-LAST:event_panelRysujacy1MouseReleased
 
