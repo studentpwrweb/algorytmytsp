@@ -4,35 +4,28 @@
  */
 package algorytmytsp.grafy;
 
+import java.util.Iterator;
+import java.util.List;
+
 /**
  *
  * @author Tomek
  */
 public class GrafDowolny extends Graf {
-    
-    protected int mapaWierzcholkow[];
-    
-    public GrafDowolny(int liczbaWierzcholkow, boolean skierowany) {
-        super(liczbaWierzcholkow, skierowany);
+    public GrafDowolny(int rozmiar, boolean skierowany) {
+        super(rozmiar, skierowany);
     }
     
-    public GrafDowolny(int liczbaWierzcholkow) {
-        this(liczbaWierzcholkow, false);
+    public GrafDowolny(int rozmiar) {
+        this(rozmiar, false);
     }
     
-    public GrafDowolny(Graf grafWzorcowy) {
-        super(grafWzorcowy);
+    @Override
+    public void ustawWageKrawedzi(int w1, int w2, double waga) {
+        super.ustawWageKrawedzi(w1, w2, waga);
     }
     
-    public void setWagaKrawedzi(int wierzcholek1, int wierzcholek2, double waga) {
-        macierzKosztow[wierzcholek1][wierzcholek2] = waga;
-
-        if (!skierowany) {
-            macierzKosztow[wierzcholek2][wierzcholek1] = waga;
-        }
-    }
-    
-    public void usunKrawedz(int wierzcholek1, int wierzcholek2) {
-        setWagaKrawedzi(wierzcholek1, wierzcholek2, Double.POSITIVE_INFINITY);
+    public void usunKrawedz(int w1, int w2) {
+        ustawWageKrawedzi(w1, w2, Double.POSITIVE_INFINITY);
     }
 }

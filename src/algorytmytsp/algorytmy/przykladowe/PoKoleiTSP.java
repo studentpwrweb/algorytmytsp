@@ -33,7 +33,7 @@ public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
         LinkedList<Integer> sciezka = new LinkedList<Integer>();
 
-        while (wierzcholek < graf.getLiczbaWierzcholkow()) {
+        while (wierzcholek < graf.getRozmiar()) {
 
             sciezka.add(wierzcholek);
 
@@ -53,7 +53,7 @@ public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
         mapaKolorow.wyczyscKolory();
 
-        while (wierzcholek < graf.getLiczbaWierzcholkow()) {
+        while (wierzcholek < graf.getRozmiar()) {
 
             sciezka.add(wierzcholek);
 

@@ -373,7 +373,7 @@ public class AlgorytmBB implements IAlgorytmTSP {
             kolumny = new ArrayList<Integer>();
             wiersze = new ArrayList<Integer>();
 
-            int n = graf.getLiczbaWierzcholkow();
+            int n = graf.getRozmiar();
 
             istnKolumny = new boolean[n];
             istnWiersze = new boolean[n];

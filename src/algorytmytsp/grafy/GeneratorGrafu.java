@@ -22,7 +22,7 @@ public class GeneratorGrafu {
 
         for (int i = 0; i < liczbaWierzcholkow; i++) {
             for (int j = 0; j < (skierowanie ? liczbaWierzcholkow : i); j++) {
-               graf.setWagaKrawedzi(i, j, generator.nextDouble());
+               graf.ustawWageKrawedzi(i, j, generator.nextDouble());
             }
             
             graf.usunKrawedz(i, i);
@@ -39,11 +39,11 @@ public class GeneratorGrafu {
         
         GrafXY graf = new GrafXY(liczbaWierzcholkow);
         
-        for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
-            graf.setWspolrzedneWierzcholka(i, generator.nextDouble(), generator.nextDouble(), false);
+        for (int i = 0; i < graf.getRozmiar(); i++) {
+            graf.ustawXYWierzcholka(i, generator.nextDouble(), generator.nextDouble(), false);
         }
         
-        graf.aktualizujWszystkieWagi();
+        graf.aktualizujWagi();
         
         return graf;
     }

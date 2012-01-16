@@ -57,17 +57,17 @@ public class PanelRysujacy extends JPanel {
         }
 
         // Obliczanie punktow w których maja zostac wyswietlone wierzcholki
-        Point2D.Double punkty[] = new Point2D.Double[graf.getLiczbaWierzcholkow()];
+        Point2D.Double punkty[] = new Point2D.Double[graf.getRozmiar()];
 
-        for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
+        for (int i = 0; i < graf.getRozmiar(); i++) {
             punkty[i] = wierzcholekNaPanel(
-                    new Point2D.Double(graf.getXWierzcholka(i), graf.getYWierzcholka(i)));
+                    new Point2D.Double(graf.xWierzcholka(i), graf.yWierzcholka(i)));
         }
 
         // Rysowanie krawedzi 
-        for (int i = 0; i < graf.getLiczbaWierzcholkow() - 1; i++) {
-            for (int j = i; j < graf.getLiczbaWierzcholkow(); j++) {
-                if (graf.czyIstniejeKrawedz(i, j)) {
+        for (int i = 0; i < graf.getRozmiar() - 1; i++) {
+            for (int j = i; j < graf.getRozmiar(); j++) {
+                if (graf.istnienieKrawedzi(i, j)) {
                     Shape linia = new Line2D.Double(punkty[i], punkty[j]);
 
                     g2.setPaint(kolorRGBKrawedzi(i, j));
@@ -77,10 +77,10 @@ public class PanelRysujacy extends JPanel {
         }
 
         // Rysowanie wag krawedzi 
-        for (int i = 0; i < graf.getLiczbaWierzcholkow() - 1; i++) {
-            for (int j = i; j < graf.getLiczbaWierzcholkow(); j++) {
-                if (graf.czyIstniejeKrawedz(i, j)) {
-                    String str = Double.toString(graf.getWagaKrawedzi(i, j));
+        for (int i = 0; i < graf.getRozmiar() - 1; i++) {
+            for (int j = i; j < graf.getRozmiar(); j++) {
+                if (graf.istnienieKrawedzi(i, j)) {
+                    String str = Double.toString(graf.wagaKrawedzi(i, j));
                     str = str.substring(0, Math.min(str.length(), schemat.getMaksDlugoscWag()));
 
                     double strSzer = g2.getFontMetrics().stringWidth(str);
@@ -121,7 +121,7 @@ public class PanelRysujacy extends JPanel {
         }
 
         // Rysowanie wierzcholkow
-        for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
+        for (int i = 0; i < graf.getRozmiar(); i++) {
             double rw = schemat.getRozmiarWierzcholka();
             Shape okrag = new Ellipse2D.Double(punkty[i].x - rw * 0.5,
                     punkty[i].y - rw * 0.5,

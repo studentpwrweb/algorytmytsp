@@ -4,83 +4,124 @@
  */
 package algorytmytsp.grafy;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  *
  * @author Tomek
  */
-public abstract class Graf {
+public class Graf {
 
-    protected double macierzKosztow[][];
-    protected int liczbaWierzcholkow;
+    protected boolean[][] macierzSasiedztwa;
+    protected List<List<Integer>> listaSasiedztwa;
+    protected double[][] macierzKosztow;
+    protected int rozmiar;
     protected boolean skierowany;
 
-    public Graf(int liczbaWierzcholkow, boolean skierowany) {
-
-        this.liczbaWierzcholkow = liczbaWierzcholkow;
+    public Graf(int rozmiar, boolean skierowany) {
+        this.rozmiar = rozmiar;
         this.skierowany = skierowany;
 
-        macierzKosztow = new double[liczbaWierzcholkow][liczbaWierzcholkow];
-    }
+        macierzSasiedztwa = new boolean[getRozmiar()][getRozmiar()];
+        listaSasiedztwa = new ArrayList<List<Integer>>(getRozmiar());
+        for (int i = 0; i < getRozmiar(); i++) {
+            listaSasiedztwa.add(new ArrayList<Integer>());
+        }
 
-    public Graf(int liczbaWierzcholkow) {
-        this(liczbaWierzcholkow, false);
-    }
-
-    public Graf(Graf grafWzorcowy) {
-        this.liczbaWierzcholkow = grafWzorcowy.liczbaWierzcholkow;
-        this.skierowany = grafWzorcowy.skierowany;
-        
-        this.macierzKosztow = grafWzorcowy.macierzKosztow.clone();
-        for (int i = 0; i < this.macierzKosztow.length; i++) {
-            this.macierzKosztow[i] = grafWzorcowy.macierzKosztow[i].clone();
+        macierzKosztow = new double[getRozmiar()][getRozmiar()];
+        for (int i = 0; i < getRozmiar(); i++) {
+            for (int j = 0; j < getRozmiar(); j++) {
+                macierzKosztow[i][j] = Double.POSITIVE_INFINITY;
+            }
         }
     }
 
-    public boolean czyIstniejeKrawedz(int wierzcholek1, int wierzcholek2) {
-        if (Double.isInfinite(getWagaKrawedzi(wierzcholek1, wierzcholek2))) {
-            return false;
-        } else {
-            return true;
-        }
+    public Graf(int rozmiar) {
+        this(rozmiar, false);
     }
     
+    public Graf() {
+        this(0);
+    }
+
+    protected void ustawWageKrawedzi(int w1, int w2, double waga) {
+        if (Double.isInfinite(waga)) {
+            if (istnienieKrawedzi(w1, w2)) {
+                macierzSasiedztwa[w1][w2] = false;
+                macierzKosztow[w1][w2] = Double.POSITIVE_INFINITY;
+
+                for (Iterator<Integer> it = listaSasiedztwa.get(w1).iterator(); it.hasNext();) {
+                    int w = it.next();
+                    if (w == w2) {
+                        it.remove();
+                        break;
+                    }
+                }
+
+                if (!isSkierowany()) {
+                    macierzSasiedztwa[w2][w1] = false;
+                    macierzKosztow[w2][w1] = Double.POSITIVE_INFINITY;
+
+                    for (Iterator<Integer> it = listaSasiedztwa.get(w2).iterator(); it.hasNext();) {
+                        int w = it.next();
+                        if (w == w1) {
+                            it.remove();
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (!istnienieKrawedzi(w1, w2)) {
+                macierzSasiedztwa[w1][w2] = true;
+                listaSasiedztwa.get(w1).add(w2);
+
+                if (!isSkierowany()) {
+                    macierzSasiedztwa[w2][w1] = true;
+                    listaSasiedztwa.get(w2).add(w1);
+                }
+
+            }
+
+            macierzKosztow[w1][w2] = waga;
+
+            if (!isSkierowany()) {
+                macierzKosztow[w2][w1] = waga;
+            }
+        }
+    }
+
+    public boolean istnienieKrawedzi(int w1, int w2) {
+        return macierzSasiedztwa[w1][w2];
+    }
+
+    public double wagaKrawedzi(int w1, int w2) {
+        return macierzKosztow[w1][w2];
+    }
+
+    public List<Integer> sasiedziWierzcholka(int w) {
+        return listaSasiedztwa.get(w);
+    }
+
+    public List<List<Integer>> getListaSasiedztwa() {
+        return listaSasiedztwa;
+    }
+
     public double[][] getMacierzKosztow() {
-        double[][] macierz = macierzKosztow.clone();
-        
-        for (int i = 0; i < macierz.length; i++) {
-            macierz[i] = macierzKosztow[i].clone();
-        }
-        
-        return macierz;
+        return macierzKosztow;
     }
 
-    public boolean czyJestSkierowany() {
+    public boolean[][] getMacierzSasiedztwa() {
+        return macierzSasiedztwa;
+    }
+
+    public final int getRozmiar() {
+        return rozmiar;
+    }
+
+    public boolean isSkierowany() {
         return skierowany;
-    }
-
-    public double getWagaKrawedzi(int wierzcholek1, int wierzcholek2) {          
-        return macierzKosztow[wierzcholek1][wierzcholek2];
-    }
-
-    public int getLiczbaWierzcholkow() {
-        return liczbaWierzcholkow;
-    }
-
-    @Override
-    public String toString() {
-
-        String str = new String();
-
-        for (int i = 0; i < liczbaWierzcholkow; i++) {
-            for (int j = 0; j < liczbaWierzcholkow; j++) {
-                str += Double.toString(getWagaKrawedzi(i, j)) + '\t';
-            }
-            
-            if (i < liczbaWierzcholkow - 1) {
-                str += '\n';
-            }
-        }
-
-        return str;
     }
 }

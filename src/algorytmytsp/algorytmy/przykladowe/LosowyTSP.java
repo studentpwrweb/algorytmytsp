@@ -51,7 +51,7 @@ public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         sciezka = new LinkedList<Integer>();
 
         ArrayList<Integer> wierzcholki = new ArrayList<Integer>();
-        for (int i = 0; i < graf.getLiczbaWierzcholkow(); i++) {
+        for (int i = 0; i < graf.getRozmiar(); i++) {
             wierzcholki.add(i);
         }
 
@@ -59,7 +59,7 @@ public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             mapaKolorow.wyczyscKolory();
         }
 
-        while (sciezka.size() < graf.getLiczbaWierzcholkow()) {
+        while (sciezka.size() < graf.getRozmiar()) {
 
             int indeksWierzcholka = generator.nextInt(wierzcholki.size());
             int wierzcholek = wierzcholki.remove(indeksWierzcholka);

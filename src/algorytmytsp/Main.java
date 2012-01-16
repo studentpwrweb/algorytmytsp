@@ -92,7 +92,7 @@ public class Main {
     private static double wagaSciezki(List<Integer> sciezka, Graf graf) {
         double waga = 0;
         for (int i = 0; i < sciezka.size() - 1; i++) {
-            waga += graf.getWagaKrawedzi(sciezka.get(i), sciezka.get(i + 1));
+            waga += graf.wagaKrawedzi(sciezka.get(i), sciezka.get(i + 1));
         }
         
         return waga;
