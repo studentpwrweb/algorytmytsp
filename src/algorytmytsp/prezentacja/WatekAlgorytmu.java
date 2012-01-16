@@ -5,9 +5,6 @@
 package algorytmytsp.prezentacja;
 
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
-import algorytmytsp.grafy.GrafXY;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -29,14 +26,13 @@ public class WatekAlgorytmu extends Thread {
 
     @Override
     public void run() {
-        algorytm.setIteracyjnie(true);
         algorytm.setMapaKolorow(panelRysujacy.getMapaKolorow());
         algorytm.setWatek(this);
 
         if (oknoProgramu != null) {
             oknoProgramu.watekRozpoczety();
         }
-        
+
         boolean przerwany = false;
 
         try {
@@ -68,7 +64,7 @@ public class WatekAlgorytmu extends Thread {
             }
         }
     }
-    
+
     public OknoProgramu getOknoProgramu() {
         return oknoProgramu;
     }

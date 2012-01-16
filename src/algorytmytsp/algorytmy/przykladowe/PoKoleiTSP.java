@@ -7,15 +7,11 @@ package algorytmytsp.algorytmy.przykladowe;
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
 import algorytmytsp.algorytmy.IAlgorytmTSP;
 import algorytmytsp.grafy.Graf;
-import algorytmytsp.grafy.GrafXY;
 import algorytmytsp.prezentacja.KoloryElementow;
 import algorytmytsp.prezentacja.MapaKolorow;
 import algorytmytsp.prezentacja.WatekAlgorytmu;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  *
@@ -23,34 +19,51 @@ import java.util.ListIterator;
  */
 public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
-    private int nrIteracji = 0;
+    public PoKoleiTSP(WatekAlgorytmu watek, MapaKolorow mapa) {
+        super(watek, mapa);
+    }
+
+    public PoKoleiTSP() {
+        super(null, null);
+    }
 
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        int wierzcholek = 0;
+
+        LinkedList<Integer> sciezka = new LinkedList<Integer>();
+
+        while (wierzcholek < graf.getLiczbaWierzcholkow()) {
+
+            sciezka.add(wierzcholek);
+
+            wierzcholek++;
+        }
+
+        sciezka.add(0);
+
+        return sciezka;
     }
 
     @Override
     public void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException {
-        
-        nrIteracji = 0;
-        
+        int wierzcholek = 0;
+
         LinkedList<Integer> sciezka = new LinkedList<Integer>();
-        
-        while (nrIteracji < graf.getLiczbaWierzcholkow()) {
-            
+
+        while (wierzcholek < graf.getLiczbaWierzcholkow()) {
+
+            sciezka.add(wierzcholek);
+
             // Koloruje wierzcholek i wszystkie incydentne krawedzie
-            mapaKolorow.kolorujWierzcholek(nrIteracji, KoloryElementow.ODWIEDZONY, true);
-            
-            sciezka.add(nrIteracji);
-            
+            mapaKolorow.kolorujWierzcholek(wierzcholek, KoloryElementow.ODWIEDZONY, true);
+
             // Koloruje sciezke (wierzcholki i krawedzie)
             mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY);
-            
-            nrIteracji++;
-  
-            zakonczIteracje();
+
+            wierzcholek++;
+
+            koniecIteracji();
         }
-        
     }
 }
