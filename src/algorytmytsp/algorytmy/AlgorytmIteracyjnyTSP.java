@@ -33,7 +33,6 @@ public abstract class AlgorytmIteracyjnyTSP {
 
     public void setMapaKolorow(MapaKolorow mapaKolorow) {
         this.mapaKolorow = mapaKolorow;
-        this.mapaKolorow.wyczyscKolory();
     }
 
     public void setWatek(WatekAlgorytmu watek) {

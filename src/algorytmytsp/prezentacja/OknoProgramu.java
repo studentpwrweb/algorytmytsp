@@ -373,11 +373,11 @@ public class OknoProgramu extends javax.swing.JFrame {
         }
     }
 
-    public void watekRozpoczety() {
+    synchronized public void watekRozpoczety() {
         przelaczStanKomponentow();
     }
 
-    public void watekZakonczony() {
+    synchronized public void watekZakonczony() {
         jToggleButton1.setSelected(false);
         przelaczStanKomponentow();
     }
