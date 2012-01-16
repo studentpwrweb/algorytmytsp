@@ -19,9 +19,9 @@ public abstract class AlgorytmIteracyjnyTSP {
     protected MapaKolorow mapaKolorow;
     protected boolean iteracyjnie = false;
     
-    public abstract List<Integer> rozwiazTSPIteracyjnie(Graf graf);
+    public abstract void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException;
     
-    protected void zakonczIteracje() {
+    protected void zakonczIteracje() throws InterruptedException {
         if (iteracyjnie && watek != null) {
             watek.koniecIteracji();
         }

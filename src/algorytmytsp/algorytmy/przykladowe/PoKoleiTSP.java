@@ -2,8 +2,10 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package algorytmytsp.algorytmy;
+package algorytmytsp.algorytmy.przykladowe;
 
+import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
+import algorytmytsp.algorytmy.IAlgorytmTSP;
 import algorytmytsp.grafy.Graf;
 import algorytmytsp.grafy.GrafXY;
 import algorytmytsp.prezentacja.KoloryElementow;
@@ -19,7 +21,7 @@ import java.util.ListIterator;
  *
  * @author Tomek
  */
-public class PrzykladowyIteracyjnyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
+public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     private int nrIteracji = 0;
 
@@ -29,7 +31,7 @@ public class PrzykladowyIteracyjnyTSP extends AlgorytmIteracyjnyTSP implements I
     }
 
     @Override
-    public List<Integer> rozwiazTSPIteracyjnie(Graf graf) {
+    public void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException {
         
         nrIteracji = 0;
         
@@ -50,6 +52,5 @@ public class PrzykladowyIteracyjnyTSP extends AlgorytmIteracyjnyTSP implements I
             zakonczIteracje();
         }
         
-        return sciezka;
     }
 }

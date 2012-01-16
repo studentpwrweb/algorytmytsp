@@ -16,44 +16,88 @@ import java.util.logging.Logger;
 public class WatekAlgorytmu extends Thread {
 
     private PanelRysujacy panelRysujacy;
+    private OknoProgramu oknoProgramu;
     private AlgorytmIteracyjnyTSP algorytm;
-    private long opoznienie;
-    
-    public WatekAlgorytmu(PanelRysujacy panelRysujacy, AlgorytmIteracyjnyTSP algorytm, long opoznienie) {
-        this.panelRysujacy = panelRysujacy;
+    private long przerwa = 0;
+    private boolean kontynuuj = false;
+
+    public WatekAlgorytmu(AlgorytmIteracyjnyTSP algorytm) {
         this.algorytm = algorytm;
-        this.opoznienie = opoznienie;
+
         this.setDaemon(true);
     }
-    
-    public WatekAlgorytmu(PanelRysujacy panelRysujacy, AlgorytmIteracyjnyTSP algorytm) {
-        this(panelRysujacy, algorytm, 1000);
-    }
-    
+
     @Override
     public void run() {
         algorytm.setIteracyjnie(true);
         algorytm.setMapaKolorow(panelRysujacy.getMapaKolorow());
         algorytm.setWatek(this);
+
+        if (oknoProgramu != null) {
+            oknoProgramu.watekRozpoczety();
+        }
         
-        algorytm.rozwiazTSPIteracyjnie(panelRysujacy.getGraf());
-        
-        this.stop();
-    }
-    
-    public void koniecIteracji() {
+        boolean przerwany = false;
+
         try {
-            panelRysujacy.repaint();
-            
-            Thread.sleep(opoznienie);
-            
+            algorytm.rozwiazTSPIteracyjnie(panelRysujacy.getGraf());
         } catch (InterruptedException ex) {
-            Logger.getLogger(WatekAlgorytmu.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("Przerwanie");
+            przerwany = true;
+        } finally {
+            if (panelRysujacy != null && !przerwany) {
+                panelRysujacy.repaint();
+            }
+
+            if (oknoProgramu != null) {
+                oknoProgramu.watekZakonczony();
+            }
+        }
+    }
+
+    public void koniecIteracji() throws InterruptedException {
+
+        if (panelRysujacy != null) {
+            panelRysujacy.repaint();
+        }
+
+        synchronized (this) {
+            if (kontynuuj) {
+                wait(przerwa);
+            } else {
+                wait();
+            }
         }
     }
     
-    public void setOpoznienie(long opoznienie) {
-        this.opoznienie = opoznienie;
+    public OknoProgramu getOknoProgramu() {
+        return oknoProgramu;
+    }
+
+    public void setOknoProgramu(OknoProgramu oknoProgramu) {
+        this.oknoProgramu = oknoProgramu;
+    }
+
+    public PanelRysujacy getPanelRysujacy() {
+        return panelRysujacy;
+    }
+
+    public void setPanelRysujacy(PanelRysujacy panelRysujacy) {
+        this.panelRysujacy = panelRysujacy;
+    }
+
+    public long getPrzerwa() {
+        return przerwa;
+    }
+
+    public void setPrzerwa(long przerwa) {
+        this.przerwa = przerwa;
+    }
+
+    public boolean isKontynuuj() {
+        return kontynuuj;
+    }
+
+    public void setKontynuuj(boolean kontynuuj) {
+        this.kontynuuj = kontynuuj;
     }
 }

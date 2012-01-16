@@ -5,11 +5,12 @@
 package algorytmytsp.prezentacja;
 
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
-import algorytmytsp.algorytmy.PrzykladowyIteracyjnyTSP;
+import algorytmytsp.algorytmy.przykladowe.PoKoleiTSP;
 import algorytmytsp.grafy.GeneratorGrafu;
 import java.util.LinkedHashMap;
 import java.util.Vector;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComponent;
 
 /**
  *
@@ -23,12 +24,12 @@ public class OknoProgramu extends javax.swing.JFrame {
     private GeneratorGrafu generator = new GeneratorGrafu();
     private LinkedHashMap<String, AlgorytmIteracyjnyTSP> algorytmy = new LinkedHashMap<String, AlgorytmIteracyjnyTSP>();
     private WatekAlgorytmu watekAlgorytmu;
-    
+
     public OknoProgramu() {
-        algorytmy.put("Pierwszy TSP", new PrzykladowyIteracyjnyTSP());
-        algorytmy.put("Drugi TSP", new PrzykladowyIteracyjnyTSP());
-        algorytmy.put("Trzeci TSP", new PrzykladowyIteracyjnyTSP());
-        
+        algorytmy.put("Pierwszy TSP", new PoKoleiTSP());
+        algorytmy.put("Drugi TSP", new PoKoleiTSP());
+        algorytmy.put("Trzeci TSP", new PoKoleiTSP());
+
         initComponents();
     }
 
@@ -137,17 +138,28 @@ public class OknoProgramu extends javax.swing.JFrame {
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Kontrola algorytmu"));
 
         jButton3.setText("Jedna Iteracja");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
-        jToggleButton1.setText("Start");
+        jToggleButton1.setText("Uruchom algorytm");
         jToggleButton1.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jToggleButton1ItemStateChanged(evt);
             }
         });
 
-        jButton4.setText("Stop");
+        jButton4.setText("Zatrzymaj algorytm");
+        jButton4.setEnabled(false);
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jLabel2.setText("Opóźnienie [ms]");
+        jLabel2.setText("Przerwa [ms]");
 
         jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1000), Integer.valueOf(0), null, Integer.valueOf(1)));
         jSpinner2.setMinimumSize(new java.awt.Dimension(60, 20));
@@ -253,26 +265,19 @@ public class OknoProgramu extends javax.swing.JFrame {
     private void jToggleButton1ItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jToggleButton1ItemStateChanged
         // TODO add your handling code here:
         if (jToggleButton1.isSelected()) {
-            jToggleButton1.setText("Pauza");
-            
-            if (watekAlgorytmu != null && watekAlgorytmu.isAlive())
-                watekAlgorytmu.resume();
-            else { 
-                watekAlgorytmu = new WatekAlgorytmu(panelRysujacy1, algorytmy.get((String)jComboBox1.getSelectedItem()), (Integer)jSpinner2.getValue());
-                watekAlgorytmu.start();
-            }
+            jToggleButton1.setText("Wstrzymaj algorytm");
+
+            uruchomWatek(true);
         } else {
-            jToggleButton1.setText("Start");
-            
-            if (watekAlgorytmu != null && watekAlgorytmu.isAlive()) {
-                watekAlgorytmu.suspend();
-            }
+            jToggleButton1.setText("Uruchom algorytm");
+
+            wstrzymajWatek();
         }
     }//GEN-LAST:event_jToggleButton1ItemStateChanged
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        panelRysujacy1.setGraf(generator.losowyGrafXY((Integer)jSpinner1.getValue()));
+        panelRysujacy1.setGraf(generator.losowyGrafXY((Integer) jSpinner1.getValue()));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -283,7 +288,7 @@ public class OknoProgramu extends javax.swing.JFrame {
     private void jSpinner2StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSpinner2StateChanged
         // TODO add your handling code here:
         if (watekAlgorytmu != null && watekAlgorytmu.isAlive()) {
-            watekAlgorytmu.setOpoznienie((Integer)jSpinner2.getValue());
+            watekAlgorytmu.setPrzerwa((Integer) jSpinner2.getValue());
         }
     }//GEN-LAST:event_jSpinner2StateChanged
 
@@ -293,6 +298,89 @@ public class OknoProgramu extends javax.swing.JFrame {
             panelRysujacy1.dodajWierzcholek(evt.getX(), evt.getY());
         }
     }//GEN-LAST:event_panelRysujacy1MouseReleased
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        if (jToggleButton1.isSelected()) {
+            jToggleButton1.doClick();
+        }
+
+        uruchomWatek(false);
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        zatrzymajWatek();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void uruchomWatek(boolean kontynuuj) {
+        if (watekAlgorytmu == null || !watekAlgorytmu.isAlive()) {
+
+            watekAlgorytmu = new WatekAlgorytmu(algorytmy.get((String) jComboBox1.getSelectedItem()));
+            watekAlgorytmu.setOknoProgramu(this);
+            watekAlgorytmu.setPanelRysujacy(panelRysujacy1);
+            watekAlgorytmu.setPrzerwa((Integer) jSpinner2.getValue());
+            watekAlgorytmu.setKontynuuj(kontynuuj);
+            watekAlgorytmu.start();
+        } else {
+            synchronized (watekAlgorytmu) {
+                watekAlgorytmu.setKontynuuj(kontynuuj);
+                watekAlgorytmu.notify();
+            }
+        }
+    }
+
+    private void wstrzymajWatek() {
+        if (watekAlgorytmu != null && watekAlgorytmu.isAlive()) {
+            synchronized (watekAlgorytmu) {
+                watekAlgorytmu.setKontynuuj(false);
+            }
+        }
+    }
+
+    private void zatrzymajWatek() {
+        if (watekAlgorytmu != null && watekAlgorytmu.isAlive()) {
+            if (!watekAlgorytmu.isAlive()) {
+                System.out.println("Watek jest 'zywy'");
+            }
+            Thread doZabicia = watekAlgorytmu;
+            watekAlgorytmu = null;
+            doZabicia.interrupt();
+        }
+    }
+
+    private void przelaczStanKomponentow() {
+
+        JComponent komponenty[] = {
+            jPanel3,
+            jButton1,
+            jButton2,
+            jLabel1,
+            jSpinner1,
+            jPanel5,
+            jComboBox1,
+            jButton4,
+            panelRysujacy1
+        };
+
+        for (JComponent komponent : komponenty) {
+            if (komponent.isEnabled()) {
+                komponent.setEnabled(false);
+            } else {
+                komponent.setEnabled(true);
+            }
+
+        }
+    }
+
+    public void watekRozpoczety() {
+        przelaczStanKomponentow();
+    }
+
+    public void watekZakonczony() {
+        jToggleButton1.setSelected(false);
+        przelaczStanKomponentow();
+    }
 
     /**
      * @param args the command line arguments
@@ -335,8 +423,6 @@ public class OknoProgramu extends javax.swing.JFrame {
             }
         });
     }
-    
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
