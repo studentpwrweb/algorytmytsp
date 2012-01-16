@@ -50,7 +50,7 @@ public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         int wierzcholek = 0;
 
         LinkedList<Integer> sciezka = new LinkedList<Integer>();
-        
+
         mapaKolorow.wyczyscKolory();
 
         while (wierzcholek < graf.getLiczbaWierzcholkow()) {
@@ -68,8 +68,12 @@ public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             koniecIteracji();
         }
         
-        sciezka.add(0);
-        mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
+        // Zamknij cykl
+        if (!sciezka.isEmpty()) {
+            sciezka.add(sciezka.getFirst());
+        }
         
+        mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
+
     }
 }

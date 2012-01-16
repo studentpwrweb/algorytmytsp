@@ -73,8 +73,12 @@ public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
             koniecIteracji();
         }
-
-        sciezka.add(sciezka.getFirst());
+        
+        // Zamknij cykl
+        if (!sciezka.isEmpty()) {
+            sciezka.add(sciezka.getFirst());
+        }
+        
         mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
     }
 

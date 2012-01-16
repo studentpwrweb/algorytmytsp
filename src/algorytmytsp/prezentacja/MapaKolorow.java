@@ -79,6 +79,10 @@ public class MapaKolorow {
     }
 
     public void kolorujSciezke(List<Integer> sciezka, KoloryElementow kolor) {
+        if (sciezka.isEmpty()) {
+            return;
+        }
+        
         for (int i = 0; i < sciezka.size() - 1; i++) {
             kolorujKrawedz(sciezka.get(i), sciezka.get(i + 1), kolor, true);
         }
