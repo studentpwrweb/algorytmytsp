@@ -67,7 +67,7 @@ public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             sciezka.add(wierzcholek);
 
             if (koloruj) {
-                mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY);
+                mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
                 mapaKolorow.kolorujWierzcholek(wierzcholek, KoloryElementow.ANALIZOWANY);
             }
 
@@ -75,6 +75,7 @@ public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         }
 
         sciezka.add(sciezka.getFirst());
+        mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
     }
 
     @Override

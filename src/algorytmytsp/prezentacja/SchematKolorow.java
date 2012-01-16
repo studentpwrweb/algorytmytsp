@@ -4,10 +4,9 @@
  */
 package algorytmytsp.prezentacja;
 
-import algorytmytsp.prezentacja.KoloryElementow;
-import java.util.EnumMap;
 import java.awt.Color;
 import java.awt.Font;
+import java.util.EnumMap;
 
 /**
  *
@@ -27,9 +26,10 @@ public class SchematKolorow {
             mapaKolorow.put(kolorElementu, Color.BLACK);
         }*/ 
         mapaKolorow.put(KoloryElementow.DOMYSLNY, Color.BLACK);
-        mapaKolorow.put(KoloryElementow.WYROZNIONY, Color.RED);
+        mapaKolorow.put(KoloryElementow.WYROZNIONY1, Color.RED);
+        mapaKolorow.put(KoloryElementow.WYROZNIONY2, Color.BLUE);
         mapaKolorow.put(KoloryElementow.NIEODWIEDZONY, Color.BLACK);
-        mapaKolorow.put(KoloryElementow.ODWIEDZONY, Color.GRAY);
+        mapaKolorow.put(KoloryElementow.ODWIEDZONY, Color.LIGHT_GRAY);
         mapaKolorow.put(KoloryElementow.ANALIZOWANY, Color.GREEN);
         mapaKolorow.put(KoloryElementow.NIEWIDOCZNY, new Color(0, true));
     }

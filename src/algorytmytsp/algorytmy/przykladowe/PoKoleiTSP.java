@@ -61,11 +61,15 @@ public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             mapaKolorow.kolorujWierzcholek(wierzcholek, KoloryElementow.ODWIEDZONY, true);
 
             // Koloruje sciezke (wierzcholki i krawedzie)
-            mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY);
+            mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
 
             wierzcholek++;
 
             koniecIteracji();
         }
+        
+        sciezka.add(0);
+        mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
+        
     }
 }
