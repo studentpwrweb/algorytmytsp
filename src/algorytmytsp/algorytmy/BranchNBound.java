@@ -11,7 +11,7 @@ import java.util.*;
  *
  * @author Tomek
  */
-public class AlgorytmBB implements IAlgorytmTSP {
+public class BranchNBound implements IAlgorytmTSP {
 
     private MacierzPrzestawna macierz;
     private HashSet<LinkedList<Integer>> czescioweRozw;
@@ -44,22 +44,22 @@ public class AlgorytmBB implements IAlgorytmTSP {
 
             rozwiazDlaWezla(wezel.getPraweDziecko());
         } else {
-            int aI, aJ;
-            int bI, bJ;
             
-            if (macierz.getElementRel(0, 0) + macierz.getElementRel(1, 1)
-                    < macierz.getElementRel(0, 1) + macierz.getElementRel(1, 0)) {
-                aI = 0; aJ = 0;
-                bI = 1; bJ = 1;
+            int w0 = macierz.getNrWiersza(0);
+            int w1 = macierz.getNrWiersza(1);
+            int k0 = macierz.getNrKolumny(0);
+            int k1 = macierz.getNrKolumny(1);
+
+            if (macierz.getElement(w0, k0) + macierz.getElement(w1, k1)
+                    < macierz.getElement(w0, k1) + macierz.getElement(w1, k0)) {
+                dodajDoRozw(w0, k0);
+                dodajDoRozw(w1, k1);
             } else {
-                aI = 0; aJ = 1;
-                bI = 1; bJ = 0;
+                dodajDoRozw(w0, k1);
+                dodajDoRozw(w1, k0);
             }
-            
-            dodajDoRozw(macierz.getNrWiersza(aI), macierz.getNrKolumny(aJ));
-            dodajDoRozw(macierz.getNrWiersza(bI), macierz.getNrKolumny(bJ));
-            
-            najlepszeRozw = (LinkedList<Integer>)czescioweRozw.toArray()[0];
+
+            najlepszeRozw = (LinkedList<Integer>) czescioweRozw.toArray()[0];
         }
     }
 
@@ -97,9 +97,9 @@ public class AlgorytmBB implements IAlgorytmTSP {
             macierz.usunElement(sciezka.getLast(), sciezka.getFirst());
         }
     }
-    
+
     private LinkedList<Integer> dodajDoRozw(int i, int j) {
-        
+
         LinkedList<Integer> nowaSciezka = new LinkedList<Integer>();
         nowaSciezka.add(i);
         nowaSciezka.add(j);
@@ -127,7 +127,7 @@ public class AlgorytmBB implements IAlgorytmTSP {
         }
 
         czescioweRozw.add(nowaSciezka);
-        
+
         return nowaSciezka;
     }
 
@@ -368,17 +368,18 @@ public class AlgorytmBB implements IAlgorytmTSP {
         private boolean[] istnWiersze;
 
         public MacierzPrzestawna(Graf graf) {
-            macierz = graf.getMacierzKosztow();
+            macierz = new double[graf.getRozmiar()][];
+            for (int i = 0; i < macierz.length; i++) {
+                macierz[i] = graf.getMacierzKosztow()[i].clone();
+            }
 
             kolumny = new ArrayList<Integer>();
             wiersze = new ArrayList<Integer>();
 
-            int n = graf.getRozmiar();
+            istnKolumny = new boolean[graf.getRozmiar()];
+            istnWiersze = new boolean[graf.getRozmiar()];
 
-            istnKolumny = new boolean[n];
-            istnWiersze = new boolean[n];
-
-            for (int i = 0; i < n; i++) {
+            for (int i = 0; i < graf.getRozmiar(); i++) {
                 kolumny.add(i);
                 wiersze.add(i);
 
@@ -425,14 +426,6 @@ public class AlgorytmBB implements IAlgorytmTSP {
             if (istnWiersze[i] && istnKolumny[j]) {
                 macierz[i][j] = wartosc;
             }
-        }
-
-        public double getElementRel(int i, int j) {
-            return getElement(getNrWiersza(i), getNrKolumny(j));
-        }
-
-        public void setElementRel(int i, int j, double wartosc) {
-            setElement(getNrWiersza(i), getNrKolumny(j), wartosc);
         }
 
         public int getLiczbaKolumn() {

@@ -4,7 +4,8 @@
  */
 package algorytmytsp;
 
-import algorytmytsp.algorytmy.AlgorytmBB;
+import algorytmytsp.algorytmy.BruteForce;
+import algorytmytsp.algorytmy.BranchNBound;
 import algorytmytsp.algorytmy.IAlgorytmTSP;
 import algorytmytsp.grafy.GeneratorGrafu;
 import algorytmytsp.grafy.Graf;
@@ -24,19 +25,19 @@ public class Main {
 
         // Algorytmy, które zostaną wykonane
         // Algorytm z którym będziemy porównywać rozwiązania (wyczerpujący) musi być pierwszy
-        IAlgorytmTSP algorytmy[] = {new AlgorytmBB(), new AlgorytmBB()};
+        IAlgorytmTSP algorytmy[] = {new BruteForce(), new BranchNBound()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 100;
+        int liczbaWierzcholkow = 10;
         boolean skierowanie = false;
         double pokrycie = 1.0; // Ta zmienna póki co nie ma wpływu na faktyczne pokrycie
 
         // Ustawienia zmian liczby wierzcholkow
         int stalyPrzyrost = 0;
-        double wspolczynnikPrzyrostu = 1.25;
+        double wspolczynnikPrzyrostu = 1.0;
 
         // Ustawienia przetwarzania
-        int liczbaIteracji = 10;
+        int liczbaIteracji = 50;
 
         // Generator grafu
         GeneratorGrafu generator = new GeneratorGrafu();
