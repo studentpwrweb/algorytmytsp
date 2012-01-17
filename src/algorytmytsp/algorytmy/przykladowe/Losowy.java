@@ -19,7 +19,7 @@ import java.util.Random;
  *
  * @author Tomek
  */
-public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
+public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     private boolean koloruj;
     private LinkedList<Integer> sciezka;

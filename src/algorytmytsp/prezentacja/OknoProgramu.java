@@ -5,8 +5,8 @@
 package algorytmytsp.prezentacja;
 
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
-import algorytmytsp.algorytmy.przykladowe.LosowyTSP;
-import algorytmytsp.algorytmy.przykladowe.PoKoleiTSP;
+import algorytmytsp.algorytmy.przykladowe.Losowy;
+import algorytmytsp.algorytmy.przykladowe.PoKolei;
 import algorytmytsp.grafy.GeneratorGrafu;
 import java.util.LinkedHashMap;
 import java.util.Vector;
@@ -27,8 +27,8 @@ public class OknoProgramu extends javax.swing.JFrame {
     private WatekAlgorytmu watekAlgorytmu;
 
     public OknoProgramu() {
-        algorytmy.put("Po kolei", new PoKoleiTSP());
-        algorytmy.put("Losowy", new LosowyTSP());
+        algorytmy.put("Po kolei", new PoKolei());
+        algorytmy.put("Losowy", new Losowy());
 
         initComponents();
     }

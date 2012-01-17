@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author Tomek
  */
-public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
+public class PoKolei extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
