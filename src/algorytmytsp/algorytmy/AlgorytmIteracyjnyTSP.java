@@ -18,11 +18,6 @@ public abstract class AlgorytmIteracyjnyTSP {
     protected WatekAlgorytmu watek;
     protected MapaKolorow mapaKolorow;
     
-    public AlgorytmIteracyjnyTSP(WatekAlgorytmu watek, MapaKolorow mapaKolorow) {
-        this.watek = watek;
-        this.mapaKolorow = mapaKolorow;
-    }
-    
     public abstract void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException;
     
     protected void koniecIteracji() throws InterruptedException {

@@ -21,13 +21,6 @@ import java.util.Random;
  */
 public class LosowyTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
-    public LosowyTSP(WatekAlgorytmu watek, MapaKolorow mapa) {
-        super(watek, mapa);
-    }
-
-    public LosowyTSP() {
-        super(null, null);
-    }
     private boolean koloruj;
     private LinkedList<Integer> sciezka;
 

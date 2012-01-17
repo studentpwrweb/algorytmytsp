@@ -19,14 +19,6 @@ import java.util.List;
  */
 public class PoKoleiTSP extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
-    public PoKoleiTSP(WatekAlgorytmu watek, MapaKolorow mapa) {
-        super(watek, mapa);
-    }
-
-    public PoKoleiTSP() {
-        super(null, null);
-    }
-
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
         int wierzcholek = 0;
