@@ -29,16 +29,16 @@ public class Main {
         IAlgorytmTSP algorytmy[] = {new BruteForce(), new BranchNBound(), new Zachlanny()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 10;
+        int liczbaWierzcholkow = 5;
         boolean skierowanie = false;
         double pokrycie = 1.0; // Ta zmienna póki co nie ma wpływu na faktyczne pokrycie
 
         // Ustawienia zmian liczby wierzcholkow
-        int stalyPrzyrost = 0;
+        int stalyPrzyrost = 1;
         double wspolczynnikPrzyrostu = 1.0;
 
         // Ustawienia przetwarzania
-        int liczbaIteracji = 50;
+        int liczbaIteracji = 10;
 
         // Generator grafu
         GeneratorGrafu generator = new GeneratorGrafu();
