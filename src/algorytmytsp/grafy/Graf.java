@@ -101,7 +101,7 @@ public class Graf {
         return macierzKosztow[w1][w2];
     }
 
-    public List<Integer> sasiedziWierzcholka(int w) {
+    public List<Integer> sasiedzi(int w) {
         return listaSasiedztwa.get(w);
     }
 

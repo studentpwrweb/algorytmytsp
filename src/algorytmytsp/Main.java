@@ -7,6 +7,7 @@ package algorytmytsp;
 import algorytmytsp.algorytmy.BruteForce;
 import algorytmytsp.algorytmy.BranchNBound;
 import algorytmytsp.algorytmy.IAlgorytmTSP;
+import algorytmytsp.algorytmy.Zachlanny;
 import algorytmytsp.grafy.GeneratorGrafu;
 import algorytmytsp.grafy.Graf;
 import java.util.List;
@@ -25,7 +26,7 @@ public class Main {
 
         // Algorytmy, które zostaną wykonane
         // Algorytm z którym będziemy porównywać rozwiązania (wyczerpujący) musi być pierwszy
-        IAlgorytmTSP algorytmy[] = {new BruteForce(), new BranchNBound()};
+        IAlgorytmTSP algorytmy[] = {new BruteForce(), new BranchNBound(), new Zachlanny()};
 
         // Ustawienia początkowe
         int liczbaWierzcholkow = 10;

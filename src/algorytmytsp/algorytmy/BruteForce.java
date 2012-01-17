@@ -60,7 +60,7 @@ public class BruteForce implements IAlgorytmTSP {
             odwiedzone[v] = true;
             // Tutaj zablokuj wierzchołek przypisując true w tablicy odwiedzonych
 
-            for (int s : graf.sasiedziWierzcholka(v)) {
+            for (int s : graf.sasiedzi(v)) {
 
                 // Sprawdź czy wierzchołek był juz odwiedzony
                 if (odwiedzone[s]) {
