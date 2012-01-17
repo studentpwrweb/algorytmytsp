@@ -9,7 +9,6 @@ import algorytmytsp.algorytmy.IAlgorytmTSP;
 import algorytmytsp.grafy.Graf;
 import algorytmytsp.prezentacja.KoloryElementow;
 import algorytmytsp.prezentacja.MapaKolorow;
-import algorytmytsp.prezentacja.WatekAlgorytmu;
 import java.util.LinkedList;
 import java.util.List;
 

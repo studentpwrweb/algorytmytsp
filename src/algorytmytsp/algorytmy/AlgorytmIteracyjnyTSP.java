@@ -5,10 +5,8 @@
 package algorytmytsp.algorytmy;
 
 import algorytmytsp.grafy.Graf;
-import algorytmytsp.grafy.GrafXY;
 import algorytmytsp.prezentacja.MapaKolorow;
 import algorytmytsp.prezentacja.WatekAlgorytmu;
-import java.util.List;
 
 /**
  *

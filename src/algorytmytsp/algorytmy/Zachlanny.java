@@ -15,7 +15,7 @@ public class Zachlanny implements IAlgorytmTSP {
         double min = Double.POSITIVE_INFINITY;
         
         // Najkrótsza znaleziona do tej pory ścieżka robocza
-        LinkedList<Integer> najkrotszaSciezka = new LinkedList<Integer>();
+        LinkedList<Integer> najkrotszaSciezka = null;
         
         // r to wierzchołek od którego zaczynamy
         for (int r = 0; r < macierz.length; r++) {

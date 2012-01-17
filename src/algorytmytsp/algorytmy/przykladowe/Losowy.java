@@ -22,15 +22,16 @@ import java.util.Random;
 public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     private boolean koloruj;
-    private LinkedList<Integer> sciezka;
 
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
 
         koloruj = false;
+        
+        List<Integer> sciezka = null;
 
         try {
-            rozwiaz(graf, null);
+             sciezka = rozwiaz(graf, null);
         } catch (InterruptedException ex) {
             System.out.println("Nieoczekiwane przerwanie");
         }
@@ -38,10 +39,10 @@ public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         return sciezka;
     }
 
-    private void rozwiaz(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
+    private List<Integer> rozwiaz(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
         Random generator = new Random();
 
-        sciezka = new LinkedList<Integer>();
+        LinkedList<Integer> sciezka = new LinkedList<Integer>();
 
         ArrayList<Integer> wierzcholki = new ArrayList<Integer>();
         for (int i = 0; i < graf.getRozmiar(); i++) {
@@ -62,17 +63,21 @@ public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             if (koloruj) {
                 mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
                 mapaKolorow.kolorujWierzcholek(wierzcholek, KoloryElementow.ANALIZOWANY);
-            }
-
-            koniecIteracji();
+                
+                koniecIteracji();
+            } 
         }
-        
+
         // Zamknij cykl
         if (!sciezka.isEmpty()) {
             sciezka.add(sciezka.getFirst());
         }
-        
-        mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
+
+        if (koloruj) {
+            mapaKolorow.kolorujSciezke(sciezka, KoloryElementow.WYROZNIONY1);
+        }
+
+        return sciezka;
     }
 
     @Override
