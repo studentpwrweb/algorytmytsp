@@ -58,6 +58,10 @@ public class WatekAlgorytmu extends Thread {
         synchronized (this) {
             if (kontynuuj) {
                 wait(przerwa);
+                
+                if (!kontynuuj) {
+                    wait();
+                }
             } else {
                 wait();
             }
