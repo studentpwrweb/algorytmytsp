@@ -16,18 +16,13 @@ import java.util.List;
  */
 public abstract class AlgorytmIteracyjnyTSP {
     protected WatekAlgorytmu watek;
-    protected MapaKolorow mapaKolorow;
     
-    public abstract void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException;
+    public abstract void rozwiazTSPIteracyjnie(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException;
     
     protected void koniecIteracji() throws InterruptedException {
         if (watek != null) {
             watek.koniecIteracji();
         }
-    }
-
-    public void setMapaKolorow(MapaKolorow mapaKolorow) {
-        this.mapaKolorow = mapaKolorow;
     }
 
     public void setWatek(WatekAlgorytmu watek) {

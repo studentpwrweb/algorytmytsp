@@ -30,7 +30,7 @@ public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         koloruj = false;
 
         try {
-            rozwiaz(graf);
+            rozwiaz(graf, null);
         } catch (InterruptedException ex) {
             System.out.println("Nieoczekiwane przerwanie");
         }
@@ -38,7 +38,7 @@ public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         return sciezka;
     }
 
-    private void rozwiaz(Graf graf) throws InterruptedException {
+    private void rozwiaz(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
         Random generator = new Random();
 
         sciezka = new LinkedList<Integer>();
@@ -76,12 +76,12 @@ public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
     }
 
     @Override
-    public void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException {
+    public void rozwiazTSPIteracyjnie(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
 
         if (mapaKolorow != null) {
             koloruj = true;
         }
 
-        rozwiaz(graf);
+        rozwiaz(graf, mapaKolorow);
     }
 }

@@ -38,7 +38,7 @@ public class PoKolei extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
     }
 
     @Override
-    public void rozwiazTSPIteracyjnie(Graf graf) throws InterruptedException {
+    public void rozwiazTSPIteracyjnie(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
         int wierzcholek = 0;
 
         LinkedList<Integer> sciezka = new LinkedList<Integer>();

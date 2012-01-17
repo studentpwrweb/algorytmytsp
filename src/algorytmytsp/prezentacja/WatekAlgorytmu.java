@@ -26,7 +26,6 @@ public class WatekAlgorytmu extends Thread {
 
     @Override
     public void run() {
-        algorytm.setMapaKolorow(panelRysujacy.getMapaKolorow());
         algorytm.setWatek(this);
 
         if (oknoProgramu != null) {
@@ -36,7 +35,7 @@ public class WatekAlgorytmu extends Thread {
         boolean przerwany = false;
 
         try {
-            algorytm.rozwiazTSPIteracyjnie(panelRysujacy.getGraf());
+            algorytm.rozwiazTSPIteracyjnie(panelRysujacy.getGraf(), panelRysujacy.getMapaKolorow());
         } catch (InterruptedException ex) {
             przerwany = true;
         } finally {
