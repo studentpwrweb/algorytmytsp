@@ -7,6 +7,7 @@ package algorytmytsp.prezentacja;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.EnumMap;
+import java.text.DecimalFormat;
 
 /**
  *
@@ -19,7 +20,7 @@ public class SchematKolorow {
     private double rozmiarWierzcholka  = 32;
     private double gruboscLinii = 2;
     private Font czcionka = new Font("Dialog", Font.PLAIN, 16);
-    private int maksDlugoscWag = 4;
+    private DecimalFormat formatWag = new DecimalFormat("#.##");
     
     public SchematKolorow() {
         /*for (KolorElementu kolorElementu : KolorElementu.values()) {
@@ -42,12 +43,12 @@ public class SchematKolorow {
         return mapaKolorow.get(kolorElementu);
     }
     
-    public int getMaksDlugoscWag() {
-        return maksDlugoscWag;
+    public DecimalFormat getFormatWag() {
+        return formatWag;
     }
 
-    public void setMaksDlugoscWag(int maksDlugoscWag) {
-        this.maksDlugoscWag = maksDlugoscWag;
+    public void setFormatWag(DecimalFormat formatWag) {
+        this.formatWag = formatWag;
     }
     
     public Font getCzcionka() {

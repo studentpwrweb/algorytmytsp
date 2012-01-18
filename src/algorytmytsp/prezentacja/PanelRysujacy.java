@@ -80,8 +80,7 @@ public class PanelRysujacy extends JPanel {
         for (int i = 0; i < graf.getRozmiar() - 1; i++) {
             for (int j = i; j < graf.getRozmiar(); j++) {
                 if (graf.istnienieKrawedzi(i, j)) {
-                    String str = Double.toString(graf.wagaKrawedzi(i, j));
-                    str = str.substring(0, Math.min(str.length(), schemat.getMaksDlugoscWag()));
+                    String str = schemat.getFormatWag().format(graf.wagaKrawedzi(i, j));
 
                     double strSzer = g2.getFontMetrics().stringWidth(str);
                     double strWys = g2.getFontMetrics().getAscent() - g2.getFontMetrics().getDescent();
