@@ -163,7 +163,7 @@ public class OknoProgramu extends javax.swing.JFrame {
 
         jLabel2.setText("Przerwa [ms]");
 
-        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1000), Integer.valueOf(0), null, Integer.valueOf(1)));
+        jSpinner2.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(1000), Integer.valueOf(1), null, Integer.valueOf(1)));
         jSpinner2.setMinimumSize(new java.awt.Dimension(60, 20));
         jSpinner2.setPreferredSize(new java.awt.Dimension(60, 20));
         jSpinner2.addChangeListener(new javax.swing.event.ChangeListener() {

@@ -110,8 +110,8 @@ public class MapaKolorow {
      * @param w wierzchołek 
      * @param kolor wybrany kolor
      */
-    public void kolorujWierzcholek(int wierzcholek, KoloryElementow kolor) {
-        kolorujWierzcholek(wierzcholek, kolor, false);
+    public void kolorujWierzcholek(int w, KoloryElementow kolor) {
+        kolorujWierzcholek(w, kolor, false);
     }
 
     /**
