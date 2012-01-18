@@ -57,7 +57,6 @@ public class BruteForce extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
         return kolejneWierzcholki;
     }
-    
 
     private void brutal(int v) throws InterruptedException {
 
@@ -68,14 +67,12 @@ public class BruteForce extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             // Sprawdź czy istnieje krawędź (0, v), jeśli istnieje, to istnieje cykl
             if (graf.istnienieKrawedzi(v, 0)) {
 
-
                 // Sprawdź czy znaleziony cykl, jest najkrótszym ze znalezionych do tej pory
                 if (wartoscWagBiezaca + graf.wagaKrawedzi(v, 0) < wartoscWag) {
 
                     wartoscWag = wartoscWagBiezaca + graf.wagaKrawedzi(v, 0);
                     kolejneWierzcholki = (LinkedList) kolejneWierzcholkiBiezaca.clone();
                     kolejneWierzcholki.add(0);
-
                 }
                 
             }
