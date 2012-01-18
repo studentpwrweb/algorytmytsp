@@ -77,7 +77,7 @@ public class Graf {
             if (!istnienieKrawedzi(w1, w2)) {
                 macierzSasiedztwa[w1][w2] = true;
                 listaSasiedztwa.get(w1).add(w2);
-
+                
                 if (!isSkierowany()) {
                     macierzSasiedztwa[w2][w1] = true;
                     listaSasiedztwa.get(w2).add(w1);

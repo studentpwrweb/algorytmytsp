@@ -26,14 +26,15 @@ public class GrafXY extends Graf {
         for (int i = 0; i < grafWzorcowy.getRozmiar(); i++) {
             ustawXYWierzcholka(i, grafWzorcowy.xWierzcholka(i), grafWzorcowy.yWierzcholka(i), false);
         }
-        
-        ustawXYWierzcholka(getRozmiar() - 1, x, y, true);
 
         for (int i = 0; i < grafWzorcowy.getRozmiar(); i++) {
             for (int j = 0; j < i; j++) {
                 ustawWageKrawedzi(i, j, grafWzorcowy.wagaKrawedzi(i, j));
             }
         }
+        
+        ustawXYWierzcholka(getRozmiar() - 1, x, y, true);
+        
     }
 
     public final void ustawXYWierzcholka(int w, double x, double y, boolean aktualizujWagi) {
