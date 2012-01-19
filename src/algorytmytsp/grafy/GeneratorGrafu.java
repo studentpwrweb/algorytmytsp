@@ -4,8 +4,6 @@
  */
 package algorytmytsp.grafy;
 
-import algorytmytsp.grafy.GrafDowolny;
-import algorytmytsp.grafy.GrafXY;
 import java.util.Random;
 
 /**
@@ -39,9 +37,9 @@ public class GeneratorGrafu {
         return losowyGraf(rozmiar, false);
     }
     
-    public GrafXY losowyGrafXY(int liczbaWierzcholkow) {
+    public GrafXY losowyGrafXY(int rozmiar) {
         
-        GrafXY graf = new GrafXY(liczbaWierzcholkow);
+        GrafXY graf = new GrafXY(rozmiar);
         
         for (int i = 0; i < graf.getRozmiar(); i++) {
             graf.ustawXYWierzcholka(i, generator.nextDouble(), generator.nextDouble(), false);
