@@ -82,7 +82,7 @@ public class BruteForce extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
                     mapaKolorow.kolorujKrawedz(v, 0, KoloryElementow.CZERWONY, true);
                     mapaKolorow.kolorujWierzcholek(0, KoloryElementow.NIEBIESKI);
                     koniecIteracji();
-                    //mapaKolorow.kolorujKrawedz(v, 0, KoloryElementow.CZARNY, true);
+                    mapaKolorow.kolorujKrawedz(v, 0, KoloryElementow.CZARNY, true);
                 }
                 // Sprawdź czy znaleziony cykl, jest najkrótszym ze znalezionych do tej pory
                 if (wartoscWagBiezaca + graf.wagaKrawedzi(v, 0) < wartoscWag) {
@@ -117,7 +117,7 @@ public class BruteForce extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
                 brutal(s);
                 if (koloruj) {
-                    //mapaKolorow.kolorujWierzcholek(s, KoloryElementow.CZARNY);
+                    mapaKolorow.kolorujWierzcholek(s, KoloryElementow.CZARNY);
                     mapaKolorow.kolorujWierzcholek(v, KoloryElementow.NIEBIESKI);
                     koniecIteracji();
                 }
@@ -127,7 +127,7 @@ public class BruteForce extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
             }
             odwiedzone[v] = false;
             if (koloruj) {
-                //mapaKolorow.kolorujWierzcholek(v, KoloryElementow.CZARNY);
+                mapaKolorow.kolorujWierzcholek(v, KoloryElementow.CZARNY);
                 //  koniecIteracji();
             }
             // Tutaj Odblokuj wierzchołek
