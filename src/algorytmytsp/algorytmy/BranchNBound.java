@@ -13,6 +13,7 @@ import java.util.*;
  */
 public class BranchNBound implements IAlgorytmTSP {
 
+    private PriorityQueue<WezelRozw> kolejkaRozw;
     private MacierzPrzestawna macierz;
     private HashSet<LinkedList<Integer>> czescioweRozw;
     private LinkedList<Integer> najlepszeRozw;
@@ -21,13 +22,14 @@ public class BranchNBound implements IAlgorytmTSP {
 
     @Override
     public List<Integer> rozwiazTSP(Graf g) {
+        kolejkaRozw = new PriorityQueue<WezelRozw>();
         macierz = new MacierzPrzestawna(g);
-        czescioweRozw = new HashSet<LinkedList<Integer>>();
+        czescioweRozw = new LinkedHashSet<LinkedList<Integer>>();
         gorneOgr = Double.POSITIVE_INFINITY;
         graf = g;
 
         rozwiazDlaWezla(new WezelRozw(null));
-
+        
         return najlepszeRozw;
     }
 
@@ -41,25 +43,35 @@ public class BranchNBound implements IAlgorytmTSP {
 
         if (macierz.getLiczbaWierszy() > 2 && macierz.getLiczbaKolumn() > 2) {
             utworzPodrozwiazania(wezel);
-
-            rozwiazDlaWezla(wezel.getPraweDziecko());
+            
+            kolejkaRozw.offer(wezel.getLewy());
+            
+            rozwiazDlaWezla(wezel.getPrawy());
         } else {
             
             int w0 = macierz.getNrWiersza(0);
             int w1 = macierz.getNrWiersza(1);
             int k0 = macierz.getNrKolumny(0);
             int k1 = macierz.getNrKolumny(1);
-
-            if (macierz.getElement(w0, k0) + macierz.getElement(w1, k1)
-                    < macierz.getElement(w0, k1) + macierz.getElement(w1, k0)) {
+            
+            double sum0 = macierz.getElement(w0, k0) + macierz.getElement(w1, k1);
+            double sum1 = macierz.getElement(w0, k1) + macierz.getElement(w1, k0);
+            double minSum;
+                    
+            if (sum0 < sum1) {
                 dodajDoRozw(w0, k0);
                 dodajDoRozw(w1, k1);
             } else {
                 dodajDoRozw(w0, k1);
                 dodajDoRozw(w1, k0);
             }
-
-            najlepszeRozw = (LinkedList<Integer>) czescioweRozw.toArray()[0];
+            
+            double dolneOgr = wezel.getDolneOgr() + Math.min(sum0, sum1);
+            
+            if (dolneOgr < gorneOgr) {
+                gorneOgr = dolneOgr;
+                najlepszeRozw = (LinkedList<Integer>) czescioweRozw.toArray()[0];
+            }
         }
     }
 
@@ -73,9 +85,9 @@ public class BranchNBound implements IAlgorytmTSP {
         wezel.setJ(oP.getJ());
 
         // Tworzenie węzłów podrozwiązań
-        wezel.setLeweDziecko(new WezelRozw(wezel,
+        wezel.setLewy(new WezelRozw(wezel,
                 wezel.getDolneOgr() + oP.getPrzyrostOgr()));
-        wezel.setPraweDziecko(new WezelRozw(wezel));
+        wezel.setPrawy(new WezelRozw(wezel));
     }
 
     private void normalizujMacierz(WezelRozw wezel) {
@@ -84,6 +96,8 @@ public class BranchNBound implements IAlgorytmTSP {
 
         if (Double.isNaN(wezel.getDolneOgr())) {
             wezel.setDolneOgr(oN.getDolneOgr());
+        } else {
+            wezel.setDolneOgr(wezel.getDolneOgr() + oN.getDolneOgr());
         }
 
     }
@@ -135,7 +149,7 @@ public class BranchNBound implements IAlgorytmTSP {
         WezelRozw rodzic = wezel.getRodzic();
 
         if (rodzic != null) {
-            if (rodzic.getPraweDziecko() == wezel) {
+            if (rodzic.getPrawy() == wezel) {
                 macierz.usunWiersz(rodzic.getI());
                 macierz.usunKolumne(rodzic.getJ());
 
@@ -477,22 +491,37 @@ public class BranchNBound implements IAlgorytmTSP {
         }
     }
 
-    private class WezelRozw {
+    private class WezelRozw implements Comparable<WezelRozw> {
 
         private double dolneOgr;
         private int i;
         private int j;
-        private WezelRozw lewyWezel = null;
-        private WezelRozw prawyWezel = null;
+        private WezelRozw lewy = null;
+        private WezelRozw prawy = null;
         private WezelRozw rodzic;
 
         public WezelRozw(WezelRozw rodzicRozw) {
             this(rodzicRozw, Double.NaN);
         }
 
-        public WezelRozw(WezelRozw rodzicRozw, double dolneOgraniczenie) {
-            this.rodzic = rodzicRozw;
-            this.dolneOgr = dolneOgraniczenie;
+        public WezelRozw(WezelRozw rodzic, double doleOgr) {
+            this.rodzic = rodzic;
+            this.dolneOgr = doleOgr;
+        }
+        
+        @Override
+        public int compareTo(WezelRozw o) {
+            if (o == null) {
+                return 1;
+            }
+            
+            if (this.getDolneOgr() > o.getDolneOgr()) {
+                return 1;
+            } else if (this.getDolneOgr() < o.getDolneOgr()) {
+                return -1;
+            } else {
+                return 0;
+            }
         }
 
         public int getI() {
@@ -523,24 +552,25 @@ public class BranchNBound implements IAlgorytmTSP {
             return rodzic;
         }
 
-        public void setRodzic(WezelRozw rodzicRozw) {
-            this.rodzic = rodzicRozw;
+        public void setRodzic(WezelRozw rodzic) {
+            this.rodzic = rodzic;
         }
 
-        public WezelRozw getLeweDziecko() {
-            return lewyWezel;
+        public WezelRozw getLewy() {
+            return lewy;
         }
 
-        public void setLeweDziecko(WezelRozw rozwBezKrawedzi) {
-            this.lewyWezel = rozwBezKrawedzi;
+        public void setLewy(WezelRozw lewy) {
+            this.lewy = lewy;
         }
 
-        public WezelRozw getPraweDziecko() {
-            return prawyWezel;
+        public WezelRozw getPrawy() {
+            return prawy;
         }
 
-        public void setPraweDziecko(WezelRozw rozwZKrawedzia) {
-            this.prawyWezel = rozwZKrawedzia;
+        public void setPrawy(WezelRozw prawy) {
+            this.prawy = prawy;
         }
+        
     }
 }
