@@ -6,22 +6,39 @@ package algorytmytsp.algorytmy;
 
 import algorytmytsp.grafy.Graf;
 import algorytmytsp.grafy.GrafDowolny;
+import algorytmytsp.prezentacja.MapaKolorow;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Tomek
  */
-public class TwiceAroundTree implements IAlgorytmTSP {
+public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     private WezelDFS wezlyDFS[];
     private List<Integer> listaDFS;
+    private boolean koloruj;
 
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
+
+        koloruj = false;
+
+        try {
+            rozwiaz(graf, null);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(TwiceAroundTree.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return listaDFS;
+    }
+
+    private void rozwiaz(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
 
         // Utwórz minimalne drzewo rozpinające
         Graf grafMST = mstPrim(graf);
@@ -45,7 +62,16 @@ public class TwiceAroundTree implements IAlgorytmTSP {
             listaDFS.add(listaDFS.get(0));
         }
 
-        return listaDFS;
+    }
+
+    @Override
+    public void rozwiazTSPIteracyjnie(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
+
+        if (mapaKolorow != null) {
+            koloruj = true;
+        }
+
+        rozwiaz(graf, mapaKolorow);
     }
 
     private Graf mstPrim(Graf graf) {
