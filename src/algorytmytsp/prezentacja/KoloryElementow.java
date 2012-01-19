@@ -9,5 +9,5 @@ package algorytmytsp.prezentacja;
  * @author Tomek
  */
 public enum KoloryElementow {
-    DOMYSLNY, CZERWONY, NIEBIESKI, SZARY, CZARNY, ZIELONY, PRZEZROCZYSTY
+    DOMYSLNY, CZERWONY, NIEBIESKI, CZARNY, SZARY, ZIELONY, PRZEZROCZYSTY
 }

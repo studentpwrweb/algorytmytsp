@@ -38,7 +38,7 @@ public class MapaKolorow {
      * Ustawia kolor wszystkich krawędzi i wierzchołków na domyślny.
      */
     final public void wyczyscKolory() {
-        kolorujGraf(KoloryElementow.DOMYSLNY);
+        //kolorujGraf(KoloryElementow.CZARNY);
     }
     
     /**

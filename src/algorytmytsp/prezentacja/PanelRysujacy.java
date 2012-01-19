@@ -211,10 +211,10 @@ public class PanelRysujacy extends JPanel {
 
         public SchematKolorow() {
             mapaKolorow.put(KoloryElementow.DOMYSLNY, Color.BLACK);
+            mapaKolorow.put(KoloryElementow.CZARNY, Color.BLACK);
             mapaKolorow.put(KoloryElementow.CZERWONY, Color.RED);
             mapaKolorow.put(KoloryElementow.NIEBIESKI, Color.BLUE);
-            mapaKolorow.put(KoloryElementow.SZARY, Color.BLACK);
-            mapaKolorow.put(KoloryElementow.CZARNY, Color.LIGHT_GRAY);
+            mapaKolorow.put(KoloryElementow.SZARY, Color.LIGHT_GRAY);
             mapaKolorow.put(KoloryElementow.ZIELONY, Color.GREEN);
             mapaKolorow.put(KoloryElementow.PRZEZROCZYSTY, new Color(0, true));
         }
