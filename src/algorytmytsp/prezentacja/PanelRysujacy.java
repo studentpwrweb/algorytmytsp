@@ -9,6 +9,8 @@ import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.text.DecimalFormat;
+import java.util.EnumMap;
 import javax.swing.JPanel;
 
 /**
@@ -152,7 +154,7 @@ public class PanelRysujacy extends JPanel {
     private Point2D.Double wierzcholekNaPanel(Point2D.Double w) {
         Point2D.Double p = new Point2D.Double();
 
-        double rw = getSchematKolorow().getRozmiarWierzcholka();
+        double rw = schemat.getRozmiarWierzcholka();
 
         p.x = w.getX() * (getWidth() - rw) + 0.5 * rw;
         p.y = w.getY() * (getHeight() - rw) + 0.5 * rw;
@@ -163,7 +165,7 @@ public class PanelRysujacy extends JPanel {
     private Point2D.Double panelNaWierzcholek(Point2D.Double p) {
         Point2D.Double w = new Point2D.Double();
 
-        double rw = getSchematKolorow().getRozmiarWierzcholka();
+        double rw = schemat.getRozmiarWierzcholka();
 
         w.x = (p.getX() - 0.5 * rw) / (getWidth() - rw);
         w.y = (p.getY() - 0.5 * rw) / (getHeight() - rw);
@@ -198,14 +200,72 @@ public class PanelRysujacy extends JPanel {
     public MapaKolorow getMapaKolorow() {
         return mapa;
     }
+    
+    private class SchematKolorow {
+        private EnumMap<KoloryElementow, Color> mapaKolorow = new EnumMap<KoloryElementow, Color>(KoloryElementow.class);
+        private Color kolorTla = Color.WHITE;
+        private double rozmiarWierzcholka  = 32;
+        private double gruboscLinii = 2;
+        private Font czcionka = new Font("Dialog", Font.PLAIN, 16);
+        private DecimalFormat formatWag = new DecimalFormat("#.##");
 
-    public void setSchematKolorow(SchematKolorow schemat) {
-        this.schemat = schemat;
+        public SchematKolorow() {
+            mapaKolorow.put(KoloryElementow.DOMYSLNY, Color.BLACK);
+            mapaKolorow.put(KoloryElementow.CZERWONY, Color.RED);
+            mapaKolorow.put(KoloryElementow.NIEBIESKI, Color.BLUE);
+            mapaKolorow.put(KoloryElementow.SZARY, Color.BLACK);
+            mapaKolorow.put(KoloryElementow.CZARNY, Color.LIGHT_GRAY);
+            mapaKolorow.put(KoloryElementow.ZIELONY, Color.GREEN);
+            mapaKolorow.put(KoloryElementow.PRZEZROCZYSTY, new Color(0, true));
+        }
 
-        this.repaint();
-    }
+        public void mapujKolor(KoloryElementow kolorElementu, Color kolorRGB) {
+            mapaKolorow.put(kolorElementu, kolorRGB);
+        }
 
-    public SchematKolorow getSchematKolorow() {
-        return schemat;
+        public Color getKolorRGB(KoloryElementow kolorElementu) {
+            return mapaKolorow.get(kolorElementu);
+        }
+
+        public DecimalFormat getFormatWag() {
+            return formatWag;
+        }
+
+        public void setFormatWag(DecimalFormat formatWag) {
+            this.formatWag = formatWag;
+        }
+
+        public Font getCzcionka() {
+            return czcionka;
+        }
+
+        public void setCzcionka(Font czcionka) {
+            this.czcionka = czcionka;
+        }
+
+        public double getGruboscLinii() {
+            return gruboscLinii;
+        }
+
+        public void setGruboscLinii(double gruboscLinii) {
+            this.gruboscLinii = gruboscLinii;
+        }
+
+        public Color getKolorRGBTla() {
+            return kolorTla;
+        }
+
+        public void setKolorRGBTla(Color kolorTla) {
+            this.kolorTla = kolorTla;
+        }
+
+        public double getRozmiarWierzcholka() {
+            return rozmiarWierzcholka;
+        }
+
+        public void setRozmiarWierzcholka(double rozmiarWierzcholka) {
+            this.rozmiarWierzcholka = rozmiarWierzcholka;
+        }
+
     }
 }
