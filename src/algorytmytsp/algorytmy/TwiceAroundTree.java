@@ -6,13 +6,10 @@ package algorytmytsp.algorytmy;
 
 import algorytmytsp.grafy.Graf;
 import algorytmytsp.grafy.GrafDowolny;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.PriorityQueue;
-import algorytmytsp.Test;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
+import java.util.PriorityQueue;
 
 /**
  *
@@ -26,8 +23,10 @@ public class TwiceAroundTree implements IAlgorytmTSP {
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
 
+        // Utwórz minimalne drzewo rozpinające
         Graf grafMST = mstPrim(graf);
 
+        // Utwórz listę dfs dla mst (lista 'naokoło' drzewa).
         dfs(grafMST);
 
         boolean bezPowtorzen[] = new boolean[graf.getRozmiar()];
