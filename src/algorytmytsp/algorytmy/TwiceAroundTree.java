@@ -10,7 +10,6 @@ import algorytmytsp.prezentacja.MapaKolorow;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.PriorityQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -75,11 +74,12 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
     }
 
     private Graf mstPrim(Graf graf) {
+        
+        WezelMST wszystkieWezly[] = new WezelMST[graf.getRozmiar()];
+        
+        ArrayList<WezelMST> listaWezlow = new ArrayList<WezelMST>();
 
-        PriorityQueue<WezelMST> kolejka = new PriorityQueue();
-        WezelMST wezlyMST[] = new WezelMST[graf.getRozmiar()];
-
-        for (int i = 0; i < wezlyMST.length; i++) {
+        for (int i = 0; i < wszystkieWezly.length; i++) {
             WezelMST wezel = new WezelMST(i);
 
             if (i == 0) {
@@ -90,36 +90,39 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
 
             wezel.setPi(null);
 
-            wezlyMST[i] = wezel;
-            kolejka.offer(wezel);
+            wszystkieWezly[i] = wezel;
+            listaWezlow.add(wezel);
         }
 
         boolean pozaKolejka[] = new boolean[graf.getRozmiar()];
+        
+        
 
-        while (!kolejka.isEmpty()) {
+        while (!listaWezlow.isEmpty()) {
+            
+            int min = 0;
+            for (int i = 0; i < listaWezlow.size(); i++) {
+                if (listaWezlow.get(i).compareTo(listaWezlow.get(min)) < 0)
+                    min = i;
+            }
 
-            WezelMST r = kolejka.poll();
+            WezelMST r = listaWezlow.remove(min);
             pozaKolejka[r.getI()] = true;
 
             for (Integer i : graf.sasiedzi(r.getI())) {
-                WezelMST v = wezlyMST[i];
+                WezelMST v = wszystkieWezly[i];
 
                 if (!pozaKolejka[i]
                         && graf.wagaKrawedzi(r.getI(), i) < v.getKlucz()) {
-
-                    kolejka.remove(v);
-
                     v.setKlucz(graf.wagaKrawedzi(r.getI(), i));
                     v.setPi(r);
-
-                    kolejka.offer(v);
                 }
             }
         }
 
         GrafDowolny mst = new GrafDowolny(graf.getRozmiar());
 
-        for (WezelMST wezel : wezlyMST) {
+        for (WezelMST wezel : wszystkieWezly) {
             int w1 = wezel.getI();
             int w2;
             if (wezel.getPi() != null) {

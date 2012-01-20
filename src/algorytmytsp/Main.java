@@ -26,16 +26,16 @@ public class Main {
         IAlgorytmTSP algorytmy[] = {new BruteForce(), new BranchNBound(), new Zachlanny(), new TwiceAroundTree()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 5;
+        int liczbaWierzcholkow = 8;
         boolean skierowanie = false;
         double pokrycie = 1.0; // Ta zmienna póki co nie ma wpływu na faktyczne pokrycie
 
         // Ustawienia zmian liczby wierzcholkow
-        int stalyPrzyrost = 1;
+        int stalyPrzyrost = 0;
         double wspolczynnikPrzyrostu = 1.0;
 
         // Ustawienia przetwarzania
-        int liczbaIteracji = 10;
+        int liczbaIteracji = 20;
 
         // Generator grafu
         GeneratorGrafu generator = new GeneratorGrafu();
@@ -57,7 +57,7 @@ public class Main {
             // Wypisywanie rozmiaru
             System.out.print(rozmiar);
 
-            Graf graf = generator.losowyGraf(rozmiar, skierowanie, pokrycie);
+            Graf graf = generator.losowyGrafXY(rozmiar);
 
             double wagaReferencyjna = Double.POSITIVE_INFINITY;
 

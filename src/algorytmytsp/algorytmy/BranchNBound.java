@@ -13,115 +13,62 @@ import java.util.*;
  */
 public class BranchNBound implements IAlgorytmTSP {
 
-    private PriorityQueue<WezelRozw> kolejkaRozw;
     private MacierzPrzestawna macierz;
     private HashSet<LinkedList<Integer>> czescioweRozw;
-    private LinkedList<Integer> najlepszeRozw;
-    private Graf graf;
-    private double gorneOgr;
+    private LinkedList<Integer> rozwiazanie;
 
     @Override
-    public List<Integer> rozwiazTSP(Graf g) {
-        kolejkaRozw = new PriorityQueue<WezelRozw>();
-        macierz = new MacierzPrzestawna(g);
-        czescioweRozw = new LinkedHashSet<LinkedList<Integer>>();
-        gorneOgr = Double.POSITIVE_INFINITY;
-        graf = g;
+    public List<Integer> rozwiazTSP(Graf graf) {
 
-        rozwiazDlaWezla(new WezelRozw(null));
-        
-        return najlepszeRozw;
+        czescioweRozw = new HashSet<LinkedList<Integer>>();
+        macierz = new MacierzPrzestawna(graf);
+
+        return rozwiaz();
     }
 
-    private void rozwiazDlaWezla(WezelRozw wezel) {
+    private List<Integer> rozwiaz() {
 
-        redukujMacierz(wezel);
-
-        blokujPodcykle(wezel);
-
-        normalizujMacierz(wezel);
-
-        if (macierz.getLiczbaWierszy() > 2 && macierz.getLiczbaKolumn() > 2) {
-            utworzPodrozwiazania(wezel);
-            
-            kolejkaRozw.offer(wezel.getLewy());
-            
-            rozwiazDlaWezla(wezel.getPrawy());
-        } else {
-            
-            int w0 = macierz.getNrWiersza(0);
-            int w1 = macierz.getNrWiersza(1);
-            int k0 = macierz.getNrKolumny(0);
-            int k1 = macierz.getNrKolumny(1);
-            
-            double sum0 = macierz.getElement(w0, k0) + macierz.getElement(w1, k1);
-            double sum1 = macierz.getElement(w0, k1) + macierz.getElement(w1, k0);
-            double minSum;
-                    
-            if (sum0 < sum1) {
-                dodajDoRozw(w0, k0);
-                dodajDoRozw(w1, k1);
-            } else {
-                dodajDoRozw(w0, k1);
-                dodajDoRozw(w1, k0);
-            }
-            
-            double dolneOgr = wezel.getDolneOgr() + Math.min(sum0, sum1);
-            
-            if (dolneOgr < gorneOgr) {
-                gorneOgr = dolneOgr;
-                najlepszeRozw = (LinkedList<Integer>) czescioweRozw.toArray()[0];
-            }
-        }
-    }
-
-    // Znajduje krawedz podzialu i tworzy węzły podrozwiązań
-    private void utworzPodrozwiazania(WezelRozw wezel) {
-        // Podział według 'najdroższej' krawedzi
-        ObslugaPodzialu oP = new ObslugaPodzialu();
-        iterujPoMacierzy(oP);
-
-        wezel.setI(oP.getI());
-        wezel.setJ(oP.getJ());
-
-        // Tworzenie węzłów podrozwiązań
-        wezel.setLewy(new WezelRozw(wezel,
-                wezel.getDolneOgr() + oP.getPrzyrostOgr()));
-        wezel.setPrawy(new WezelRozw(wezel));
-    }
-
-    private void normalizujMacierz(WezelRozw wezel) {
         ObslugaNormalizacji oN = new ObslugaNormalizacji();
         iterujPoMacierzy(oN);
 
-        if (Double.isNaN(wezel.getDolneOgr())) {
-            wezel.setDolneOgr(oN.getDolneOgr());
-        } else {
-            wezel.setDolneOgr(wezel.getDolneOgr() + oN.getDolneOgr());
+        ObslugaWyboru oP = new ObslugaWyboru();
+        iterujPoMacierzy(oP);
+
+        while (macierz.getLiczbaWierszy() > 1 && macierz.getLiczbaKolumn() > 1) {
+
+            // Normalizacja macierzy
+            iterujPoMacierzy(oN);
+
+            // Wybór wierzchołka
+            iterujPoMacierzy(oP);
+
+            int i = oP.getI();
+            int j = oP.getJ();
+
+            // Redukuj macierz
+            macierz.usunWiersz(i);
+            macierz.usunKolumne(j);
+  
+            // Dodaj krawędź do rozwiązania i zablokuj podcykle
+            dodajDoRozw(i, j);
         }
 
+        // Dodaj ostatnią krawędź
+        dodajDoRozw(macierz.getNrWiersza(0), macierz.getNrKolumny(0));
+
+        return (LinkedList<Integer>) czescioweRozw.toArray()[0];
     }
 
-    private void blokujPodcykle(WezelRozw wezel) {
-
-        WezelRozw rodzic = wezel.getRodzic();
-
-        if (rodzic != null) {
-            LinkedList<Integer> sciezka = dodajDoRozw(rodzic.getI(), rodzic.getJ());
-            macierz.usunElement(sciezka.getLast(), sciezka.getFirst());
-        }
-    }
-
-    private LinkedList<Integer> dodajDoRozw(int i, int j) {
+    private void dodajDoRozw(int i, int j) {
 
         LinkedList<Integer> nowaSciezka = new LinkedList<Integer>();
         nowaSciezka.add(i);
         nowaSciezka.add(j);
-
+        
         for (Iterator<LinkedList<Integer>> it = czescioweRozw.iterator(); it.hasNext();) {
             LinkedList<Integer> sciezka = it.next();
 
-            if (sciezka.getLast() == nowaSciezka.getFirst()) {
+            if (sciezka.getLast().equals(nowaSciezka.getFirst())) {
                 nowaSciezka.removeFirst();
                 nowaSciezka.addAll(0, sciezka);
                 it.remove();
@@ -132,31 +79,17 @@ public class BranchNBound implements IAlgorytmTSP {
         for (Iterator<LinkedList<Integer>> it = czescioweRozw.iterator(); it.hasNext();) {
             LinkedList<Integer> sciezka = it.next();
 
-            if (sciezka.getFirst() == nowaSciezka.getLast()) {
+            if (sciezka.getFirst().equals(nowaSciezka.getLast())) {
                 nowaSciezka.removeLast();
                 nowaSciezka.addAll(sciezka);
                 it.remove();
                 break;
             }
         }
-
+        
         czescioweRozw.add(nowaSciezka);
 
-        return nowaSciezka;
-    }
-
-    private void redukujMacierz(WezelRozw wezel) {
-        WezelRozw rodzic = wezel.getRodzic();
-
-        if (rodzic != null) {
-            if (rodzic.getPrawy() == wezel) {
-                macierz.usunWiersz(rodzic.getI());
-                macierz.usunKolumne(rodzic.getJ());
-
-            } else {
-                macierz.usunElement(rodzic.getI(), rodzic.getJ());
-            }
-        }
+        macierz.usunElement(nowaSciezka.getLast(), nowaSciezka.getFirst());
     }
 
     private void iterujPoMacierzy(ObslugaIteracji oI) {
@@ -241,7 +174,7 @@ public class BranchNBound implements IAlgorytmTSP {
         }
     }
 
-    private class ObslugaPodzialu extends ObslugaIteracji {
+    private class ObslugaWyboru extends ObslugaIteracji {
 
         private ArrayList<Integer> iZer;
         private ArrayList<Integer> jZer;
@@ -489,88 +422,5 @@ public class BranchNBound implements IAlgorytmTSP {
 
             return str;
         }
-    }
-
-    private class WezelRozw implements Comparable<WezelRozw> {
-
-        private double dolneOgr;
-        private int i;
-        private int j;
-        private WezelRozw lewy = null;
-        private WezelRozw prawy = null;
-        private WezelRozw rodzic;
-
-        public WezelRozw(WezelRozw rodzicRozw) {
-            this(rodzicRozw, Double.NaN);
-        }
-
-        public WezelRozw(WezelRozw rodzic, double doleOgr) {
-            this.rodzic = rodzic;
-            this.dolneOgr = doleOgr;
-        }
-        
-        @Override
-        public int compareTo(WezelRozw o) {
-            if (o == null) {
-                return 1;
-            }
-            
-            if (this.getDolneOgr() > o.getDolneOgr()) {
-                return 1;
-            } else if (this.getDolneOgr() < o.getDolneOgr()) {
-                return -1;
-            } else {
-                return 0;
-            }
-        }
-
-        public int getI() {
-            return i;
-        }
-
-        public void setI(int i) {
-            this.i = i;
-        }
-
-        public int getJ() {
-            return j;
-        }
-
-        public void setJ(int j) {
-            this.j = j;
-        }
-
-        public double getDolneOgr() {
-            return dolneOgr;
-        }
-
-        public void setDolneOgr(double dolneOgr) {
-            this.dolneOgr = dolneOgr;
-        }
-
-        public WezelRozw getRodzic() {
-            return rodzic;
-        }
-
-        public void setRodzic(WezelRozw rodzic) {
-            this.rodzic = rodzic;
-        }
-
-        public WezelRozw getLewy() {
-            return lewy;
-        }
-
-        public void setLewy(WezelRozw lewy) {
-            this.lewy = lewy;
-        }
-
-        public WezelRozw getPrawy() {
-            return prawy;
-        }
-
-        public void setPrawy(WezelRozw prawy) {
-            this.prawy = prawy;
-        }
-        
     }
 }
