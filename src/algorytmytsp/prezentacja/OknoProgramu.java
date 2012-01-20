@@ -6,6 +6,7 @@ package algorytmytsp.prezentacja;
 
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
 import algorytmytsp.algorytmy.BruteForce;
+import algorytmytsp.algorytmy.Zachlanny;
 import algorytmytsp.algorytmy.przykladowe.Losowy;
 import algorytmytsp.algorytmy.przykladowe.PoKolei;
 import algorytmytsp.grafy.GeneratorGrafu;
@@ -28,7 +29,8 @@ public class OknoProgramu extends javax.swing.JFrame {
     private WatekAlgorytmu watekAlgorytmu;
 
     public OknoProgramu() {
-        algorytmy.put("Brute-force", new BruteForce());
+        algorytmy.put("Wyczerpujacy (brute-force)", new BruteForce());
+        algorytmy.put("Najblizszego sasiada", new Zachlanny());
         algorytmy.put("Po kolei", new PoKolei());
         algorytmy.put("Losowy", new Losowy());
 

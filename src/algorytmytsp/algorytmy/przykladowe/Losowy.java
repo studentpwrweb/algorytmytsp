@@ -6,6 +6,7 @@ package algorytmytsp.algorytmy.przykladowe;
 
 import algorytmytsp.algorytmy.AlgorytmIteracyjnyTSP;
 import algorytmytsp.algorytmy.IAlgorytmTSP;
+import algorytmytsp.algorytmy.Zachlanny;
 import algorytmytsp.grafy.Graf;
 import algorytmytsp.prezentacja.KoloryElementow;
 import algorytmytsp.prezentacja.MapaKolorow;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -33,7 +36,7 @@ public class Losowy extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
         try {
              sciezka = rozwiaz(graf, null);
         } catch (InterruptedException ex) {
-            System.out.println("Nieoczekiwane przerwanie");
+            Logger.getLogger(Zachlanny.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return sciezka;
