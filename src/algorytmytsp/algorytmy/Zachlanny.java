@@ -41,8 +41,8 @@ public class Zachlanny implements IAlgorytmTSP {
                 // Odległość między ostatnim a najbliższym wierzchołkiem
                 double km = Double.POSITIVE_INFINITY;
 
-                for (int y : graf.sasiedzi(ostatni)) {
-                    
+                for (int y = 0; y < macierz.length; y++) {
+ 
                     // Jeśli na ścieżce nie ma wierzchołka y
                     // i odległość do y jest mniejsza od km...
                     if (!naSciezce[y] && macierz[ostatni][y] < km) {

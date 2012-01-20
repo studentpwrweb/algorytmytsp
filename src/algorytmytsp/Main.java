@@ -33,7 +33,7 @@ public class Main {
         double wspolczynnikPrzyrostu = 1.0;
 
         // Ustawienia przetwarzania
-        int liczbaIteracji = 100;
+        int liczbaIteracji = 1000;
 
         // Generator grafu
         GeneratorGrafu generator = new GeneratorGrafu();
