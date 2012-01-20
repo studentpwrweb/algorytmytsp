@@ -26,8 +26,12 @@ public class Zachlanny implements IAlgorytmTSP {
             // Ścieżka robocza
             LinkedList<Integer> sciezka = new LinkedList<Integer>();
             
+            // Informuje o tym czy wierzchołek znajduje się już na ścieżce
+            boolean naSciezce[] = new boolean[macierz.length];
+            
             // Dodaj wierzchołek początkowy do ścieżki roboczej
             sciezka.add(r);
+            naSciezce[r] = true;
 
             for (int x = 0; x < macierz.length - 1; x++) {
                 
@@ -41,7 +45,7 @@ public class Zachlanny implements IAlgorytmTSP {
                     
                     // Jeśli na ścieżce nie ma wierzchołka y
                     // i odległość do y jest mniejsza od km...
-                    if (!sciezka.contains(y) && macierz[ostatni][y] < km) {
+                    if (!naSciezce[y] && macierz[ostatni][y] < km) {
                         
                         // ...to znaczy, że y jest najbliższym znalezionym do tej pory wierzchołkiem
                         najblizszy = y;
@@ -57,6 +61,7 @@ public class Zachlanny implements IAlgorytmTSP {
                     
                     // .. w przeciwnym wypadku, dodaj najbliższy wierzchołek do ścieżki
                     sciezka.add(najblizszy);
+                    naSciezce[najblizszy] = true;
                     dlugosc += km;
                 }
             }

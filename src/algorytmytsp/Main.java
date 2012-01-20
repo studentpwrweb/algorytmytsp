@@ -22,20 +22,18 @@ public class Main {
         // TODO code application logic here
 
         // Algorytmy, które zostaną wykonane
-        // Algorytm z którym będziemy porównywać rozwiązania (wyczerpujący) musi być pierwszy
-        IAlgorytmTSP algorytmy[] = {new BruteForce(), new BranchNBound(), new Zachlanny(), new TwiceAroundTree()};
+        // Algorytm z którym będziemy porównywać rozwiązania musi być pierwszy
+        IAlgorytmTSP algorytmy[] = {new Zachlanny(), new TwiceAroundTree(), new BranchNBound()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 8;
-        boolean skierowanie = false;
-        double pokrycie = 1.0; // Ta zmienna póki co nie ma wpływu na faktyczne pokrycie
+        int liczbaWierzcholkow = 100;
 
         // Ustawienia zmian liczby wierzcholkow
-        int stalyPrzyrost = 0;
+        int stalyPrzyrost = 10;
         double wspolczynnikPrzyrostu = 1.0;
 
         // Ustawienia przetwarzania
-        int liczbaIteracji = 20;
+        int liczbaIteracji = 100;
 
         // Generator grafu
         GeneratorGrafu generator = new GeneratorGrafu();
@@ -43,17 +41,17 @@ public class Main {
         // Alokacja pamięci
         int rozmiaryGrafow[] = new int[liczbaIteracji];
         long czasyObliczen[][] = new long[liczbaIteracji][algorytmy.length]; // nanosekundy
-        double jakosciRozwiazan[][] = new double[liczbaIteracji][algorytmy.length]; // obliczone rozwiazanie / optymale rozwiazanie
+        double jakoscRozwiazan[][] = new double[liczbaIteracji][algorytmy.length]; // waga / waga referencyjna
 
         // Przetwarzanie
         for (int i = 0; i < liczbaIteracji; i++) {
 
             int rozmiar = (int) (liczbaWierzcholkow * Math.pow(wspolczynnikPrzyrostu, i)
                     + stalyPrzyrost * i);
-            
+
             // Zapis obliczonego rozmiaru
             rozmiaryGrafow[i] = rozmiar;
-            
+
             // Wypisywanie rozmiaru
             System.out.print(rozmiar);
 
@@ -67,7 +65,7 @@ public class Main {
                 long poczatek = System.nanoTime();
                 List<Integer> rozwiazanie = algorytmy[j].rozwiazTSP(graf);
                 long koniec = System.nanoTime();
-                
+
                 double waga = wagaSciezki(rozwiazanie, graf);
 
                 if (j == 0) {
@@ -76,24 +74,24 @@ public class Main {
 
                 // Zapis wynikow
                 czasyObliczen[i][j] = koniec - poczatek;
-                jakosciRozwiazan[i][j] = waga / wagaReferencyjna;
-                
+                jakoscRozwiazan[i][j] = waga / wagaReferencyjna;
+
                 // Wypisywanie wyników
                 System.out.print('\t' + Long.toString(czasyObliczen[i][j]));
-                System.out.print('\t' + Double.toString(jakosciRozwiazan[i][j]));
+                System.out.print('\t' + Double.toString(jakoscRozwiazan[i][j]));
             }
-            
+
             System.out.println();
         }
 
     }
-    
+
     private static double wagaSciezki(List<Integer> sciezka, Graf graf) {
         double waga = 0;
         for (int i = 0; i < sciezka.size() - 1; i++) {
             waga += graf.wagaKrawedzi(sciezka.get(i), sciezka.get(i + 1));
         }
-        
+
         return waga;
     }
 }
