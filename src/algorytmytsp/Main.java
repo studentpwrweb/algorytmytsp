@@ -26,7 +26,7 @@ public class Main {
         IAlgorytmTSP algorytmy[] = {new Zachlanny(), new TwiceAroundTree(), new BranchNBound()};
 
         // Ustawienia początkowe
-        int liczbaWierzcholkow = 100;
+        int liczbaWierzcholkow = 1290;
 
         // Ustawienia zmian liczby wierzcholkow
         int stalyPrzyrost = 10;
