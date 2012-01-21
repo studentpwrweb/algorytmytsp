@@ -23,7 +23,7 @@ public class Main {
 
         // Algorytmy, które zostaną wykonane
         // Algorytm z którym będziemy porównywać rozwiązania musi być pierwszy
-        IAlgorytmTSP algorytmy[] = {new BruteForce()};//, new Zachlanny(), new TwiceAroundTree(), new BranchNBound()};
+        IAlgorytmTSP algorytmy[] = {new BruteForce(), new Zachlanny(), new TwiceAroundTree(), new BranchNBound()};
 
         // Ustawienia początkowe
         int liczbaWierzcholkow = 5;
@@ -86,93 +86,16 @@ public class Main {
         }
         
         
-        
-        /*
-         * 
-         * 
-         * 
-         * 
-         * 
-         */
-        
-        System.out.println();
-        
-        
-        IAlgorytmTSP algorytmy2[] = {new Zachlanny(), new TwiceAroundTree(), new BranchNBound()};
-
-        // Ustawienia początkowe
-        liczbaWierzcholkow = 5;
-
-        // Ustawienia zmian liczby wierzcholkow
-        stalyPrzyrost = 10;
-        wspolczynnikPrzyrostu = 1.0;
-
-        // Ustawienia przetwarzania
-        liczbaIteracji = 10;
-
-
-        // Alokacja pamięci
-        rozmiaryGrafow = new int[liczbaIteracji];
-        czasyObliczen = new long[liczbaIteracji][algorytmy2.length]; // nanosekundy
-        jakoscRozwiazan = new double[liczbaIteracji][algorytmy2.length]; // waga / waga referencyjna
-
-        // Przetwarzanie
-        for (int i = 0; i < liczbaIteracji; i++) {
-
-            int rozmiar = (int) (liczbaWierzcholkow * Math.pow(wspolczynnikPrzyrostu, i)
-                    + stalyPrzyrost * i);
-
-            // Zapis obliczonego rozmiaru
-            rozmiaryGrafow[i] = rozmiar;
-
-            // Wypisywanie rozmiaru
-            System.out.print(rozmiar);
-
-            Graf graf = generator.losowyGrafXY(rozmiar);
-
-            double wagaReferencyjna = Double.POSITIVE_INFINITY;
-
-            for (int j = 0; j < algorytmy2.length; j++) {
-
-                // Obliczenia dla i-tego algorytmu
-                long poczatek = System.nanoTime();
-                List<Integer> rozwiazanie = algorytmy2[j].rozwiazTSP(graf);
-                long koniec = System.nanoTime();
-
-                double waga = wagaSciezki(rozwiazanie, graf);
-
-                if (j == 0) {
-                    wagaReferencyjna = waga;
-                }
-
-                // Zapis wynikow
-                czasyObliczen[i][j] = koniec - poczatek;
-                jakoscRozwiazan[i][j] = waga / wagaReferencyjna;
-
-                // Wypisywanie wyników
-                System.out.print('\t' + Long.toString(czasyObliczen[i][j]));
-                //System.out.print('\t' + Double.toString(jakoscRozwiazan[i][j]));
-            }
-
-            System.out.println();
-        }
-        
-        /*
-         * 
-         * 
-         * 
-         */
-        
         System.out.println();
   
-        double sredniaJakosc[] = new double[algorytmy2.length];
+        double sredniaJakosc[] = new double[algorytmy.length];
         
         for (int i = 0; i < sredniaJakosc.length; i++) {
             sredniaJakosc[i] = 0;
         }
         
         for (int i = 0; i < jakoscRozwiazan.length; i++) {
-            for (int j = 0; j < algorytmy2.length; j++) {
+            for (int j = 0; j < algorytmy.length; j++) {
                 sredniaJakosc[j] += jakoscRozwiazan[i][j];
             }
         }

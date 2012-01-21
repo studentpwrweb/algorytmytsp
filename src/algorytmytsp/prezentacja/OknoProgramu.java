@@ -28,7 +28,7 @@ public class OknoProgramu extends javax.swing.JFrame {
 
     public OknoProgramu() {
         
-        algorytmy.put("Brute-force)", new BruteForce());
+        algorytmy.put("Brute-force", new BruteForce());
         algorytmy.put("Nearest Neighbour", new Zachlanny());
         algorytmy.put("Twice-around-the-tree", new TwiceAroundTree());
         algorytmy.put("Branch and Bound", new BranchNBound());
