@@ -5,34 +5,52 @@
 package algorytmytsp.algorytmy;
 
 import algorytmytsp.grafy.Graf;
+import algorytmytsp.prezentacja.KoloryElementow;
+import algorytmytsp.prezentacja.MapaKolorow;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Tomek
  */
-public class BranchNBound implements IAlgorytmTSP {
+public class BranchNBound extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
 
     private MacierzPrzestawna macierz;
     private HashSet<LinkedList<Integer>> czescioweRozw;
     private LinkedList<Integer> rozwiazanie;
+    private boolean koloruj;
+    private MapaKolorow mapaKolorow;
 
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
-
-        czescioweRozw = new HashSet<LinkedList<Integer>>();
-        macierz = new MacierzPrzestawna(graf);
-
-        return rozwiaz();
+        
+        List<Integer> sciezka = null;
+        try {
+            sciezka = rozwiaz(graf);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(BranchNBound.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return sciezka;
     }
 
-    private List<Integer> rozwiaz() {
+    private List<Integer> rozwiaz(Graf graf) throws InterruptedException {
+        
+        czescioweRozw = new HashSet<LinkedList<Integer>>();
+        macierz = new MacierzPrzestawna(graf);
 
         ObslugaNormalizacji oN = new ObslugaNormalizacji();
         iterujPoMacierzy(oN);
 
         ObslugaWyboru oP = new ObslugaWyboru();
         iterujPoMacierzy(oP);
+        
+        if (koloruj) {
+            mapaKolorow.wyczyscKolory();
+            koniecIteracji();
+        }
 
         while (macierz.getLiczbaWierszy() > 1 && macierz.getLiczbaKolumn() > 1) {
 
@@ -48,6 +66,11 @@ public class BranchNBound implements IAlgorytmTSP {
             // Redukuj macierz
             macierz.usunWiersz(i);
             macierz.usunKolumne(j);
+            
+            if (koloruj) {
+                mapaKolorow.kolorujKrawedz(i, j, KoloryElementow.ZIELONY, true);
+                koniecIteracji();
+            }
   
             // Dodaj krawędź do rozwiązania i zablokuj podcykle
             dodajDoRozw(i, j);
@@ -55,8 +78,25 @@ public class BranchNBound implements IAlgorytmTSP {
 
         // Dodaj ostatnią krawędź
         dodajDoRozw(macierz.getNrWiersza(0), macierz.getNrKolumny(0));
+        
+        List<Integer> rozwiazanie = (List<Integer>) czescioweRozw.toArray()[0];
+        
+        if (koloruj) {
+            mapaKolorow.kolorujSciezke(rozwiazanie, KoloryElementow.CZERWONY);
+            koniecIteracji();
+        }
 
-        return (LinkedList<Integer>) czescioweRozw.toArray()[0];
+        return rozwiazanie;
+    }
+    
+    @Override
+    public void rozwiazTSPIteracyjnie(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
+        if (mapaKolorow != null) {
+            koloruj = true;
+            this.mapaKolorow = mapaKolorow;
+        }
+        
+        rozwiaz(graf);
     }
 
     private void dodajDoRozw(int i, int j) {

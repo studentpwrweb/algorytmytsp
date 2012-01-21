@@ -6,6 +6,7 @@ package algorytmytsp.algorytmy;
 
 import algorytmytsp.grafy.Graf;
 import algorytmytsp.grafy.GrafDowolny;
+import algorytmytsp.prezentacja.KoloryElementow;
 import algorytmytsp.prezentacja.MapaKolorow;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -22,6 +23,7 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
     private WezelDFS wezlyDFS[];
     private List<Integer> listaDFS;
     private boolean koloruj;
+    private MapaKolorow mapaKolorow;
 
     @Override
     public List<Integer> rozwiazTSP(Graf graf) {
@@ -29,7 +31,7 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
         koloruj = false;
 
         try {
-            rozwiaz(graf, null);
+            rozwiaz(graf);
         } catch (InterruptedException ex) {
             Logger.getLogger(TwiceAroundTree.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -37,13 +39,23 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
         return listaDFS;
     }
 
-    private void rozwiaz(Graf graf, MapaKolorow mapaKolorow) throws InterruptedException {
+    private void rozwiaz(Graf graf) throws InterruptedException {
 
+        if (koloruj) {
+            mapaKolorow.kolorujGraf(KoloryElementow.SZARY);
+            koniecIteracji();
+        }
+        
         // Utwórz minimalne drzewo rozpinające
         Graf grafMST = mstPrim(graf);
 
         // Utwórz listę dfs dla mst (lista 'naokoło' drzewa).
         dfs(grafMST);
+        
+        if (koloruj) {
+            mapaKolorow.kolorujSciezke(listaDFS, KoloryElementow.ZIELONY);
+            koniecIteracji();
+        }
 
         boolean bezPowtorzen[] = new boolean[graf.getRozmiar()];
 
@@ -59,6 +71,22 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
 
         if (listaDFS.size() > 0) {
             listaDFS.add(listaDFS.get(0));
+            
+            if (koloruj) {
+
+                mapaKolorow.kolorujWierzcholek(listaDFS.get(0), KoloryElementow.NIEBIESKI);
+
+                koniecIteracji();
+
+                for (int i = 1; i < listaDFS.size(); i++) {  
+                    mapaKolorow.kolorujKrawedz(listaDFS.get(i-1), listaDFS.get(i), KoloryElementow.CZERWONY, true);
+                    mapaKolorow.kolorujWierzcholek(listaDFS.get(i), KoloryElementow.NIEBIESKI);
+                    koniecIteracji();
+                }
+                
+                mapaKolorow.wyczyscKolory();
+                mapaKolorow.kolorujSciezke(listaDFS, KoloryElementow.CZERWONY);
+            }
         }
 
     }
@@ -68,12 +96,13 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
 
         if (mapaKolorow != null) {
             koloruj = true;
+            this.mapaKolorow = mapaKolorow;
         }
 
-        rozwiaz(graf, mapaKolorow);
+        rozwiaz(graf);
     }
 
-    private Graf mstPrim(Graf graf) {
+    private Graf mstPrim(Graf graf) throws InterruptedException {
         
         WezelMST wszystkieWezly[] = new WezelMST[graf.getRozmiar()];
         
@@ -96,7 +125,6 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
 
         boolean pozaKolejka[] = new boolean[graf.getRozmiar()];
         
-        
 
         while (!listaWezlow.isEmpty()) {
             
@@ -108,6 +136,17 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
 
             WezelMST r = listaWezlow.remove(min);
             pozaKolejka[r.getI()] = true;
+            
+            
+            if (koloruj) {
+                
+                if (r.getPi() != null) {
+                    mapaKolorow.kolorujKrawedz(r.getPi().getI(), r.getI(), KoloryElementow.CZARNY, true);
+                } else {
+                    mapaKolorow.kolorujWierzcholek(r.getI(), KoloryElementow.CZARNY);
+                }
+                koniecIteracji();
+            }
 
             for (Integer i : graf.sasiedzi(r.getI())) {
                 WezelMST v = wszystkieWezly[i];
@@ -136,7 +175,7 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
         return mst;
     }
 
-    private void dfs(Graf graf) {
+    private void dfs(Graf graf) throws InterruptedException {
 
         wezlyDFS = new WezelDFS[graf.getRozmiar()];
 
@@ -153,14 +192,20 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
         for (int i = 0; i < wezlyDFS.length; i++) {
             WezelDFS u = wezlyDFS[i];
             if (u.getKolor() == WezelDFS.BIALY) {
-                listaDFS.add(u.getI());
                 dfsVisit(graf, u);
             }
         }
     }
 
-    private void dfsVisit(Graf graf, WezelDFS u) {
+    private void dfsVisit(Graf graf, WezelDFS u) throws InterruptedException {
         u.setKolor(WezelDFS.SZARY);
+        listaDFS.add(u.getI());
+        
+        if (koloruj) {
+            mapaKolorow.kolorujSciezke(listaDFS, KoloryElementow.ZIELONY);
+            mapaKolorow.kolorujWierzcholek(u.getI(), KoloryElementow.NIEBIESKI);
+            koniecIteracji();
+        }
 
         for (Integer i : graf.sasiedzi(u.getI())) {
             WezelDFS v = wezlyDFS[i];
@@ -168,11 +213,17 @@ public class TwiceAroundTree extends AlgorytmIteracyjnyTSP implements IAlgorytmT
             if (v.getKolor() == WezelDFS.BIALY) {
                 v.setPi(u);
 
-                listaDFS.add(v.getI());
                 dfsVisit(graf, v);
                 listaDFS.add(u.getI());
+                
+                if (koloruj) {
+                    mapaKolorow.kolorujSciezke(listaDFS, KoloryElementow.ZIELONY);
+                    mapaKolorow.kolorujWierzcholek(u.getI(), KoloryElementow.NIEBIESKI);
+                    koniecIteracji();
+                }
             }
         }
+        
 
         u.setKolor(WezelDFS.CZARNY);
     }

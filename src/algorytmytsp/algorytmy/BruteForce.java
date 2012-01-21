@@ -65,6 +65,7 @@ public class BruteForce extends AlgorytmIteracyjnyTSP implements IAlgorytmTSP {
     private void brutal(int v) throws InterruptedException {
         if (koloruj) {
             mapaKolorow.wyczyscKolory();
+            koniecIteracji();
         }
 
         kolejneWierzcholkiBiezaca.add(v); // Dodaj wierzchołek v do bieżącej listy wierzchołków
