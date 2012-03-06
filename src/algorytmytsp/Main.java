@@ -11,7 +11,7 @@ import java.util.List;
 
 /**
  *
- * @author student
+ * @author Tomek
  */
 public class Main {
 
